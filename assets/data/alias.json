@@ -1,0 +1,106 @@
+[
+    {
+      "answer": "france",
+      "alias": ["fr"]
+    },
+    {
+      "answer": "allemagne",
+      "alias": ["de"]
+    },
+    {
+      "answer": "italie",
+      "alias": ["it"]
+    },
+    {
+      "answer": "espagne",
+      "alias": ["es"]
+    },
+    {
+      "answer": "portugal",
+      "alias": ["pt"]
+    },
+    {
+      "answer": "angleterre",
+      "alias": ["uk"]
+    },
+    {
+      "answer": "belgique",
+      "alias": ["be"]
+    },
+    {
+      "answer": "suisse",
+      "alias": ["ch"]
+    },
+    {
+      "answer": "pays-bas",
+      "alias": ["nl"]
+    },
+    {
+      "answer": "danemark",
+      "alias": ["dk"]
+    },
+    {
+      "answer": "norvège",
+      "alias": ["no"]
+    },
+    {
+      "answer": "suède",
+      "alias": ["se"]
+    },
+    {
+      "answer": "finlande",
+      "alias": ["fi"]
+    },
+    {
+      "answer": "islande",
+      "alias": ["is"]
+    },
+    {
+      "answer": "irlande",
+      "alias": ["ie"]
+    },
+    {
+      "answer": "luxembourg",
+      "alias": ["lu"]
+    },
+    {
+      "answer": "autriche",
+      "alias": ["at"]
+    },
+    {
+      "answer": "république tchèque",
+      "alias": ["cz"]
+    },
+    {
+      "answer": "slovaquie",
+      "alias": ["sk"]
+    },
+    {
+      "answer": "slovénie",
+      "alias": ["si"]
+    },
+    {
+      "answer": "croatie",
+      "alias": ["hr"]
+    },
+    {
+      "answer": "bosnie-herzégovine",
+      "alias": ["ba"]
+    },
+    {
+      "answer": "monténégro",
+      "alias": ["me"]
+    },
+    {
+      "answer": "macédoine",
+      "alias": ["mk"]
+    },
+    {
+      "answer": "serbie",
+      "alias": ["rs"]
+    },
+    {
+      "answer": "bulgarie",
+      "alias": ["bg"]
+    }
+  ]

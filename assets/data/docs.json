@@ -1,0 +1,13 @@
+{
+  "france": [],
+  "canada": [
+    {
+      "name": "Plonkit",
+      "url": "https://www.plonkit.net/canada"
+    },
+    {
+      "name": "Car Meta",
+      "url": "https://www.car-meta.com/canada"
+    }
+  ]
+}

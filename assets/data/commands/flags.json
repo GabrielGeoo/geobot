@@ -1,0 +1,5 @@
+{
+  "command": "flags",
+  "question": "De quel drapeau s'agit-il ?",
+  "auto": true
+}
