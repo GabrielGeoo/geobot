@@ -1,0 +1,67 @@
+# TUTO : Comment ajouter des commandes
+
+* Une commande = un fichier json répertoriant toutes les questions associés dans le dossier assets/data/commands
+* Chaque fichier json est composé de :
+  *  Une clé "command" indiquant le nom de la commande
+  *  Une clé "question" indiquant la question à poser (dans chaque embed)
+  *  Une clé "quiz" indiquant toutes les questions du quiz
+  *  Une clé "auto" optionnel, si cette option est à true, on va rechercher toutes les images dans le dossier d'images correspondant et ajouter les quiz automatiquement (voir détail plus bas)
+* Chaque objet "quiz" est composé de :
+  *  Une clé "answer" indiquant la réponse possible (voir plus bas pour les alias)
+  *  Une clé "image" optionnel indiquant le chemin de l'image associée à la question, par défaut, cela prends l'image correspondant à la réponse dans la clé "answer", sans les majuscules, les accents, et en remplaçant les espaces par des underscores "_".
+* Chaque image du quiz est placé dans le dossier "assets/images/\<nom_command\>"
+  
+### Alias
+
+L'ajout des alias se fait dans le fichier json assets/data/alias.json. Le fichier est composé d'une liste d'alias sous la forme :
+* Une clé "answer" pour la réponse de base
+* Une clé "alias" pour la liste des alias associé à la réponse
+
+### Quiz automatique
+
+Pour le quiz automatique, le code se fait commme suit :
+En règle général, soit on mets auto à true sans renseigner de quiz, soit on renseigne un quiz et on mets auto à false, mais voici comment cela fonctionne sinon. On récupère les données de la clé quiz renseigné dans le json pour construire le quiz. Ensuite, pour toutes les images non utilisés dans le dossier, on les recupère pour construire la suite.
+
+### Exemple
+
+Voici un exemple pour le fichier de drapeaux :
+```json
+{
+  "command": "flags",
+  "question": "De quel drapeau s'agit-il ?",
+  "auto": true,
+  "quiz": [
+    {
+      "answer": "France",
+      "image": "image_de_la_france.png"
+    },
+    {
+      "answer": "Belgique",
+    },
+  ]
+}
+```
+Le dossier assets/images/flags contiends les images "image_de_la_france.png" et "belgique.png", "espagne.png", "allemagne.png".
+Le bot va en premier lieu récupérer la france et la belgique renseigné dans la clé quiz. La partie sur la belgique ne contient pas de clé "image" donc on va rechercher une image "belgique.png" ou "belgique.jpg" etc. Tout les noms de fichiers doivent être écrit en minuscule, sans accent, et les espaces sont remplacés par des underscores "_" (ex: pays_bas.png).
+Ceci fait, puisque auto est à true, on recupère les images non utilisés dans la balise quiz, c'est à dire "espagne.png" et "allemagne.png" pour les ajouter au quiz.
+Note : Ce cas n'est pas réellement un cas réel puisque que nous n'avons pas besoin de renseigner "belgique" dans le quiz ni "france" si on renomme bien le fichier d'image, mais il montre comment le bot fonctionne.
+
+Pour les alias, il suffirait d'ajouter ceci dans la liste par exemple, sauf si les alias ont déjà été renseigné en lien avec un autre quiz : 
+```json
+{
+  "answer": "france",
+  "alias": ["fr"]
+},
+{
+  "answer": "allemagne",
+  "alias": ["de"]
+},
+{
+  "answer": "belgique",
+  "alias": ["be"]
+},
+{
+  "answer": "espagne",
+  "alias": ["es"]
+}
+```
