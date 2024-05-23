@@ -5,7 +5,7 @@ const stopCommand = new SlashCommandBuilder()
   .setName("stop")
   .setDescription("Arrête le quiz");
 
-const flags = {
+const stop = {
   data: stopCommand,
   async execute(interaction: ChatInputCommandInteraction | Message) {
     const quiz = QuizManager.getInstance().getQuiz(interaction.channelId);
@@ -17,4 +17,4 @@ const flags = {
   }
 };
 
-export default flags;
+export default stop;

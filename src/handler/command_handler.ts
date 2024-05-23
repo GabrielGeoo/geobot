@@ -59,10 +59,12 @@ async function registerSlashCommand(client: Client) {
   });
 }
 
+const prefix = "!"
+
 async function registerPrefixCommand(client: Client) {
   client.on(Events.MessageCreate, async (message) => {
-    if (!message.content.startsWith(process.env.PREFIX!)) return;
-    const args = message.content.slice(process.env.PREFIX!.length).trim().split(/ +/);
+    if (!message.content.startsWith(prefix)) return;
+    const args = message.content.slice(prefix.length).trim().split(/ +/);
     const commandName = args.shift()!.toLowerCase();
     const command = commands.find(command => command.data.name === commandName);
     if (command) {

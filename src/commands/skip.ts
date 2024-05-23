@@ -5,7 +5,7 @@ const skipCommand = new SlashCommandBuilder()
   .setName("skip")
   .setDescription("Passes la question du quiz");
 
-const flags = {
+const skip = {
   data: skipCommand,
   async execute(interaction: ChatInputCommandInteraction | Message) {
     const quiz = QuizManager.getInstance().getQuiz(interaction.channelId);
@@ -19,4 +19,4 @@ const flags = {
   }
 };
 
-export default flags;
+export default skip;
