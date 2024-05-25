@@ -9,7 +9,7 @@ import getAlias from "./get_alias";
 export default function buildQuizCommand(data: any): any {
   const command = new SlashCommandBuilder()
     .setName(data.command)
-    .setDescription(data.question)
+    .setDescription(data.description)
     .addNumberOption(option => option
       .setName("questions_number")
       .setDescription("Nombre de questions")
@@ -18,6 +18,7 @@ export default function buildQuizCommand(data: any): any {
 
   return {
     data: command,
+    quizCommand: true,
     transformOptionsToArgs(interaction: ChatInputCommandInteraction) {
       return [interaction.options.getNumber("questions_number")?.toString() ?? "1"];
     },
