@@ -33,7 +33,7 @@ export default async function registerCommands(client: Client): Promise<void> {
 async function registerSlashCommand(client: Client) {
   const rest = new REST({ version: '10' }).setToken(process.env.BOT_TOKEN!);
   await rest.put(
-    Routes.applicationGuildCommands("1242889695525081208", "1059873716529537054"), 
+    Routes.applicationGuildCommands(config.botId, config.guildId), 
     { body: commands.get().map(command => command.data.toJSON())}
   );
 
