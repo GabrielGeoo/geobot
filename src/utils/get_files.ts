@@ -7,8 +7,6 @@ export default function getFiles(dir: string, extensions: string | null | string
 
   try {
     const files = fs.readdirSync(dir, { withFileTypes: true });
-    console.log("Files found:", files);
-    console.log("For directory:", dir);
     files.forEach(file => {
       if (file.isDirectory()) {
         fileNames.push(...getFiles(path.join(dir, file.name), extensions, complete, recursive));
@@ -21,6 +19,5 @@ export default function getFiles(dir: string, extensions: string | null | string
     console.error(`Error reading directory ${dir}:`, error);
   }
 
-  console.log("Files found:", fileNames);
   return fileNames;
 }
