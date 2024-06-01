@@ -15,9 +15,11 @@
     "@discordjs/builders": "^1.8.1",
     "discord.js": "^14.15.2",
     "dotenv": "^16.4.5",
+    "puppeteer": "^22.10.0",
     "ts-node": "^10.9.2"
   },
   "devDependencies": {
+    "@types/google.maps": "^3.55.9",
     "@types/node": "^20.12.12",
     "tsx": "^4.10.5"
   }
