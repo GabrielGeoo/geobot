@@ -3,9 +3,9 @@ import getFiles from "../utils/get_files";
 import path from "path";
 import buildQuizCommand from "../utils/quiz_command_builder";
 import * as fs from "fs/promises";
+import commands from "../utils/get_commands";
+import config from '../../assets/config.json';
 require('dotenv').config();
-
-const commands: any[] = [];
 
 export default async function registerCommands(client: Client): Promise<void> {
   console.log("Registering commands...");
@@ -13,7 +13,7 @@ export default async function registerCommands(client: Client): Promise<void> {
 
   for (const commandFile of commandFiles) {
     const command = require(commandFile).default;
-    commands.push(command);
+    commands.add(command);
   }
 
   //ajout des commandes de quiz
@@ -21,7 +21,7 @@ export default async function registerCommands(client: Client): Promise<void> {
   for (const quizFile of quizFiles) {
     const data = await fs.readFile(quizFile, "utf8");
     const json = JSON.parse(data);
-    commands.push(buildQuizCommand(json));
+    commands.add(buildQuizCommand(json));
   }
 
   await registerSlashCommand(client);
@@ -34,13 +34,13 @@ async function registerSlashCommand(client: Client) {
   const rest = new REST({ version: '10' }).setToken(process.env.BOT_TOKEN!);
   await rest.put(
     Routes.applicationGuildCommands("1242889695525081208", "1059873716529537054"), 
-    { body: commands.map(command => command.data.toJSON())}
+    { body: commands.get().map(command => command.data.toJSON())}
   );
 
   client.on(Events.InteractionCreate, async (interaction) => {
     if (interaction.isChatInputCommand()) {
       try {
-        const command = commands.find(command => command.data.name === interaction.commandName);
+        const command = commands.get().find(command => command.data.name === interaction.commandName);
         if (command) {
           const args = command.transformOptionsToArgs ? command.transformOptionsToArgs(interaction) : [];
           await command.execute(interaction, args);
@@ -59,14 +59,12 @@ async function registerSlashCommand(client: Client) {
   });
 }
 
-const prefix = "!"
-
 async function registerPrefixCommand(client: Client) {
   client.on(Events.MessageCreate, async (message) => {
-    if (!message.content.startsWith(prefix)) return;
-    const args = message.content.slice(prefix.length).trim().split(/ +/);
+    if (!message.content.startsWith(config.prefix)) return;
+    const args = message.content.slice(config.prefix.length).trim().split(/ +/);
     const commandName = args.shift()!.toLowerCase();
-    const command = commands.find(command => command.data.name === commandName);
+    const command = commands.get().find(command => command.data.name === commandName);
     if (command) {
       try {
         await command.execute(message, args);
