@@ -10,8 +10,6 @@ require('dotenv').config();
 export default async function registerCommands(client: Client): Promise<void> {
   console.log("Registering commands...");
   const commandFiles = getFiles(path.join(__dirname, "..", "commands"));
-  console.log(path.join(__dirname, "..", "commands"));
-  console.log(commandFiles);
 
   for (const commandFile of commandFiles) {
     const command = require(commandFile).default;
