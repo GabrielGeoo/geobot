@@ -1,1 +1,6 @@
-
+{
+  "command": "regions",
+  "question": "Quelle est cette régions de France ?",
+  "description": "Quiz sur les régions de France",
+  "auto": true
+}
