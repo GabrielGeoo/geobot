@@ -1,6 +1,5 @@
 {
   "command": "flags",
   "question": "De quel drapeau s'agit-il ?",
-  "description": "Quiz sur les drapeaux du monde",
-  "auto": true
+  "description": "Quiz sur les drapeaux du monde"
 }

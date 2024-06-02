@@ -38,59 +38,33 @@ export default function buildQuizCommand(data: any): any {
 
       const files = getFiles(path.join(__dirname, "../..", "assets/images/" + data.command), null, false);
 
-      const allAnswers: string[] = data.quiz?.map((q: any) => q.answer) ?? [];
-      const allImages: string[] = data.quiz?.map((q: any) => q.image ?? q.answer) ?? [];
-      if (allAnswers.find((a: string) => a === undefined || a === null)) {
-        console.error("Missing answer in quiz");
-        return;
-      }
-      //validate images
-      for (const image of allImages) {
-        const find = files.find((file: string) => file.split(".")[0] === normalizeString(image.split(".")[0]));
-        if (!find) {
-          console.error("Missing image in quiz");
-          return;
-        } else if (!image.includes(".")) {
-          allImages[allImages.indexOf(image)] = find;
-        }
-      }
+      const allAnswers: any[] = files.map(file => {
+        const answer = normalizeString(file.split(".")[0].split(";")[0]);
+        return {
+          answer: answer,
+          image: file
+        };
+      });
 
-      //add auto completion
-      if (data.auto) {
-        for (const file of files) {
-          if (!allImages.includes(file)) {
-            const find = allAnswers.find((a) => a === normalizeString(file.split(".")[0]))
-            if (find) {
-              console.error("Duplication d'une réponse et d'une image dans le quiz pour la réponse : " + find);
-              return;
-            } else {
-              allAnswers.push(file.split(".")[0]);
-              allImages.push(file);
-            }
-          }
-        }
-      }
 
       if (questionsNumber > allAnswers.length) {
         await interaction.reply("Le nombre maximum de questions pour ce type de quiz est de " + allAnswers.length + " questions.");
         return;
       }
-      assert(allAnswers.length === allImages.length, "Answers and images are not the same length");
 
       //build quiz
       QuizManager.getInstance().createQuiz(channelId, data.command, data.question, data.color);
       for (let i = 0; i < questionsNumber; i++) {
         const random = Math.floor(Math.random() * allAnswers.length);
-        const alias = await getAlias(allAnswers[random]);
+        const alias = await getAlias(allAnswers[random].answer);
         const answers = new Set<string>(alias);
         answers.delete(allAnswers[random]);
         QuizManager.getInstance().getQuiz(channelId)?.addQuestion(
-          [allAnswers[random], ...answers],
-          allImages[random]
+          [allAnswers[random].answer, ...answers],
+          allAnswers[random].image
         );
 
         allAnswers.splice(random, 1);
-        allImages.splice(random, 1);
       }
 
       await QuizManager.getInstance().getQuiz(channelId)?.sendCurrentQuestion(interaction);
