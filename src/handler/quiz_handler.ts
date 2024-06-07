@@ -1,5 +1,5 @@
 import { ColorResolvable, Snowflake } from "discord.js";
-import Quiz from "../models/quiz_question";
+import Quiz from "../models/QuizQuestion";
 
 export default class QuizHandler {
 
