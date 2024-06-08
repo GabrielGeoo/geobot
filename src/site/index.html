@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Street View Example</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        #map {
+            width: 100%;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="map"></div>
+    <script>
+        class MyURLSearchParams extends URLSearchParams {
+            constructor(init) {
+                super(init);
+            }
+            getFloat(key) {
+                return parseFloat(this.get(key));
+            }
+        }
+
+        function initMap() {
+            const queryString = window.location.search;
+            const urlParams = new MyURLSearchParams(queryString);
+
+            // Créez une carte centrée sur un emplacement spécifique
+            const map = new google.maps.Map(document.getElementById('map'), {
+                center: { lat: urlParams.getFloat("lat"), lng: urlParams.getFloat("lng") },
+                zoom: urlParams.getFloat("zoom"),
+            });
+
+            // Activez la vue Street View
+            const panorama = new google.maps.StreetViewPanorama(
+                document.getElementById('map'),
+                {
+                    position: { lat: urlParams.getFloat("lat"), lng: urlParams.getFloat("lng") },
+                    pov: { heading: urlParams.getFloat("heading"), pitch: urlParams.getFloat("pitch") },
+                    zoom: urlParams.getFloat("zoom"),
+                    showRoadLabels: false,
+                },
+            );
+
+            // Associez la vue Street View à la carte
+            map.setStreetView(panorama);
+        }
+    </script>
+    <script>
+        document.getElementById('map').style.height = window.innerHeight + 'px';
+        const key = new URLSearchParams(window.location.search).get('key');
+        const script = document.createElement('script');
+        script.src = `https://maps.googleapis.com/maps/api/js?key=${key}&callback=initMap`;
+        document.body.appendChild(script);
+    </script>
+</body>
+
+</html>
