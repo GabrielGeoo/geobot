@@ -1,6 +1,6 @@
 import { ChatInputCommandInteraction, Message, SlashCommandBuilder } from "discord.js";
-import getUser from "../utils/get_info_from_command_or_message";
-import User from "../models/User";
+import getUser from "../../utils/get_info_from_command_or_message";
+import User from "../../models/User";
 
 const registerCommand = new SlashCommandBuilder()
   .setName("register")
@@ -35,6 +35,12 @@ const register = {
     }
 
     const find = await User.findOne({ userId: getUser(interaction).id });
+    const account = await User.findOne({ geoguessrId: geoguessrId });
+    if (account) {
+      if (find && find.userId === account.userId) interaction.reply({ content: "Ce compte geoguessr est déjà lié à votre compte", ephemeral: true });
+      else interaction.reply({ content: "Ce compte geoguessr est déjà lié à @" + account.userId, ephemeral: true });
+      return;
+    }
     if (find) {
       await User.updateOne({ userId: getUser(interaction).id }, { geoguessrId });
       interaction.reply({ content: "Lien geoguessr mis à jour", ephemeral: true });
