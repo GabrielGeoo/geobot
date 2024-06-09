@@ -1,19 +1,19 @@
 [
     {
       "answer": "france",
-      "alias": ["fr"]
+      "alias": ["fr","fra"]
     },
     {
       "answer": "allemagne",
-      "alias": ["de"]
+      "alias": ["de","germany"]
     },
     {
       "answer": "italie",
-      "alias": ["it"]
+      "alias": ["it","italy"]
     },
     {
       "answer": "espagne",
-      "alias": ["es"]
+      "alias": ["es","spain"]
     },
     {
       "answer": "portugal",
@@ -21,35 +21,35 @@
     },
     {
       "answer": "angleterre",
-      "alias": ["uk"]
+      "alias": ["uk","england"]
     },
     {
       "answer": "belgique",
-      "alias": ["be"]
+      "alias": ["be","belgium"]
     },
     {
       "answer": "suisse",
-      "alias": ["ch"]
+      "alias": ["ch","switzerland"]
     },
     {
       "answer": "pays-bas",
-      "alias": ["nl"]
+      "alias": ["nl","netherlands"]
     },
     {
       "answer": "danemark",
-      "alias": ["dk"]
+      "alias": ["dk","denmark"]
     },
     {
       "answer": "norvège",
-      "alias": ["no"]
+      "alias": ["no","norway"]
     },
     {
       "answer": "suède",
-      "alias": ["se"]
+      "alias": ["se","sweden"]
     },
     {
       "answer": "finlande",
-      "alias": ["fi"]
+      "alias": ["fi","finland"]
     },
     {
       "answer": "islande",
