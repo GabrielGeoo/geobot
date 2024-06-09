@@ -1,8 +1,8 @@
 import { ChatInputCommandInteraction, Message, SlashCommandBuilder } from "discord.js";
 import User from "../../models/User";
-import getUser from "../../utils/get_info_from_command_or_message";
 import getGeoguessrData from "../../utils/geoguessr_data/geoguessr_data";
 import getRankData from "../../utils/geoguessr_data/rank_data";
+import { getUser } from "../../utils/get_info_from_command_or_message";
 
 const rankCommand = new SlashCommandBuilder()
   .setName("rank")

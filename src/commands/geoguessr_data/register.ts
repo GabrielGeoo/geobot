@@ -1,6 +1,6 @@
 import { ChatInputCommandInteraction, Message, SlashCommandBuilder } from "discord.js";
-import getUser from "../../utils/get_info_from_command_or_message";
 import User from "../../models/User";
+import { getUser } from "../../utils/get_info_from_command_or_message";
 
 const registerCommand = new SlashCommandBuilder()
   .setName("register")

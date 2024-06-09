@@ -1,4 +1,4 @@
-import mongoose, { InferSchemaType, Schema } from "mongoose";
+import mongoose, { InferSchemaType } from "mongoose";
 
 const rankDataSchema = new mongoose.Schema({
   rating: { type: Number, required: true },

@@ -1,9 +1,9 @@
 import { AttachmentBuilder, ChatInputCommandInteraction, EmbedBuilder, Message, SlashCommandBuilder } from "discord.js";
 import User from "../../models/User";
-import getUser from "../../utils/get_info_from_command_or_message";
 import getGeoguessrData from "../../utils/geoguessr_data/geoguessr_data";
 import getLevelImage from "../../utils/geoguessr_data/level_image";
 import getRankData from "../../utils/geoguessr_data/rank_data";
+import { getUser } from "../../utils/get_info_from_command_or_message";
 
 const profilCommand = new SlashCommandBuilder()
   .setName("profil")

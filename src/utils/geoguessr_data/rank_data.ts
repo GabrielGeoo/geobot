@@ -22,5 +22,10 @@ export default async function getRankDataString(data: any, user: any, client: Cl
   }
 
   const guild = await client.guilds.fetch("728006388936081528");
-  return `Elo : ${data.user.competitive.rating}\nLigue actuel : ${progressDivision.divisionName} ${guild.emojis.cache.get(progressDivision.emojiId) ?? ""}${divisionPosition}\nMeilleure ligue : ${bestDivision.divisionName} ${guild.emojis.cache.get(bestDivision.emojiId) ?? ""}`;
+  return `Elo : ${data.user.competitive.rating}\n` 
+    + `Ligue actuel : ${progressDivision.divisionName} ${guild.emojis.cache.get(progressDivision.emojiId) ?? ""}${divisionPosition}\n` 
+    + `Meilleure ligue : ${bestDivision.divisionName} ${guild.emojis.cache.get(bestDivision.emojiId) ?? ""}\n`
+    + `Parties terminées : ${data.userStats.gamesPlayed}\n`
+    + `Daily challenge streak : ${data.userStats.dailyChallengeStreak}\n`;
+    //+ `Duels : ${data.userExtendedStats.duels.numWins}/${data.userExtendedStats.duels.numGamesPlayed} (${data.userExtendedStats.duels.winRatio}%)\n`
 }

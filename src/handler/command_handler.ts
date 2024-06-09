@@ -1,4 +1,4 @@
-import { Client, Events, REST, Routes } from "discord.js";
+import { ChatInputCommandInteraction, Client, Events, REST, Routes } from "discord.js";
 import getFiles from "../utils/get_files";
 import path from "path";
 import buildQuizCommand from "../utils/quiz_command_builder";
@@ -43,6 +43,7 @@ async function registerSlashCommand(client: Client) {
         const command = commands.get().find(command => command.data.name === interaction.commandName);
         if (command) {
           const args = command.transformOptionsToArgs ? command.transformOptionsToArgs(interaction) : [];
+          if ((interaction as ChatInputCommandInteraction).options.getSubcommand(false)) args.unshift((interaction as ChatInputCommandInteraction).options.getSubcommand());
           await command.execute(interaction, args);
         }
       } catch (error) {
@@ -66,6 +67,10 @@ async function registerPrefixCommand(client: Client) {
     const commandName = args.shift()!.toLowerCase();
     const command = commands.get().find(command => command.data.name === commandName);
     if (command) {
+      if (command.permissions && !message.member?.permissions.has(command.permissions)) {
+        await message.reply("Vous n'avez pas la permission d'exécuter cette commande");
+        return;
+      }
       try {
         await command.execute(message, args);
       } catch (error) {

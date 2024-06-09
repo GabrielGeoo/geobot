@@ -1,6 +1,6 @@
 import { AttachmentBuilder, ChatInputCommandInteraction, Message, SlashCommandBuilder } from "discord.js";
 import User from "../../models/User";
-import getUser from "../../utils/get_info_from_command_or_message";
+import { getUser } from "../../utils/get_info_from_command_or_message";
 import getGeoguessrData from "../../utils/geoguessr_data/geoguessr_data";
 
 const avatarCommand = new SlashCommandBuilder()
@@ -24,9 +24,11 @@ const avatar = {
 
     const dbUser = await User.findOne({ userId: user.id });
     if (!dbUser) {
-      interaction.reply({ content: user.id === getUser(interaction).id 
-        ? "Vous n'êtes pas enregistré. Utilisez la commande `!register <votre_lien_de_profil_geoguessr>`"
-        : "Cet utilisateur n'est pas enregistré", ephemeral: true });
+      interaction.reply({
+        content: user.id === getUser(interaction).id
+          ? "Vous n'êtes pas enregistré. Utilisez la commande `!register <votre_lien_de_profil_geoguessr>`"
+          : "Cet utilisateur n'est pas enregistré", ephemeral: true
+      });
       return;
     }
 
