@@ -53,15 +53,15 @@
     },
     {
       "answer": "islande",
-      "alias": ["is"]
+      "alias": ["is","iceland"]
     },
     {
       "answer": "irlande",
-      "alias": ["ie"]
+      "alias": ["ie","ireland"]
     },
     {
       "answer": "luxembourg",
-      "alias": ["lu"]
+      "alias": ["lu","lux"]
     },
     {
       "answer": "autriche",
@@ -102,5 +102,17 @@
     {
       "answer": "bulgarie",
       "alias": ["bg"]
+    },
+    {
+      "answer": "usa",
+      "alias": ["us"]
+    },
+    {
+      "answer": "canada",
+      "alias": ["ca"]
+    },
+    {
+      "answer": "mexique",
+      "alias": ["mx","mexico"]
     }
   ]
