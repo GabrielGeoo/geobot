@@ -5,6 +5,7 @@ import buildQuizCommand from "../utils/quiz_command_builder";
 import * as fs from "fs/promises";
 import commands from "../utils/get_commands";
 import config from '../../assets/config.json';
+import Log from "../models/Log";
 require('dotenv').config();
 
 export default async function registerCommands(client: Client): Promise<void> {
@@ -48,6 +49,7 @@ async function registerSlashCommand(client: Client) {
         }
       } catch (error) {
         console.error(error);
+        await handleError(error);
         if (interaction.replied || interaction.deferred) {
           await interaction.followUp({ content: 'There was an error while executing this command!', ephemeral: true });
         } else {
@@ -72,11 +74,34 @@ async function registerPrefixCommand(client: Client) {
         return;
       }
       try {
+        if (command.quizCommand) {
+          await Log.create({
+            message: "Un quiz '" + command.data.name + "' a été lancé par " + message.author.username + " dans le channel " + message.channel.id + " venant du message " + message.id,
+            date: new Date()
+          });
+        }
         await command.execute(message, args);
       } catch (error) {
         console.error(error);
+        await handleError(error);
         await message.reply('There was an error while executing this command!');
       }
     }
   });
+}
+
+async function handleError(error: any) {
+  if (error instanceof Error) {
+    await Log.create({
+      name: error.name,
+      message: error.message,
+      stack: error.stack,
+      date: new Date()
+    });
+  } else {
+    await Log.create({
+      message: error,
+      date: new Date()
+    });
+  }
 }

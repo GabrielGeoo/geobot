@@ -18,7 +18,7 @@ const client = new Client({
 async function main() {
   try {
     console.log('Starting bot...');
-    await mongoose.connect(process.env.MONGODB_URI!);
+    await mongoose.connect(process.env.MONGODB_URI!, {dbName: "GeoBot"});
     console.log('Connected to MongoDB');
     await registerEvents(client);
     await registerCommands(client);

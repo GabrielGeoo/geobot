@@ -1,6 +1,6 @@
 import { AttachmentBuilder, ChatInputCommandInteraction, Message, SlashCommandBuilder } from "discord.js";
 import User from "../../models/User";
-import { getUser } from "../../utils/get_info_from_command_or_message";
+import { getDbUser, getUser } from "../../utils/get_info_from_command_or_message";
 import getGeoguessrData from "../../utils/geoguessr_data/geoguessr_data";
 
 const avatarCommand = new SlashCommandBuilder()
@@ -12,31 +12,30 @@ const avatarCommand = new SlashCommandBuilder()
 const avatar = {
   data: avatarCommand,
   async execute(interaction: ChatInputCommandInteraction | Message, args: string[]) {
-    let user;
-    let full = false;
-    if (interaction instanceof ChatInputCommandInteraction) {
-      user = interaction.options.getUser("user") ?? interaction.user;
-      full = interaction.options.getBoolean("full") ?? false;
-    } else {
-      user = interaction.mentions.users.first() ?? interaction.author;
-      full = args.includes("full") || args.includes("true");
+    const user = await getDbUser(interaction);
+    if (user) {
+      let full = false;
+      if (interaction instanceof ChatInputCommandInteraction) {
+        full = interaction.options.getBoolean("full") ?? false;
+      } else {
+        full = args.includes("full") || args.includes("true");
+      }
+  
+      if (!user.geoguessrId) {
+        await interaction.reply({
+          content: user.userId === getUser(interaction).id
+            ? "Vous n'êtes pas enregistré. Utilisez la commande `!register <votre_lien_de_profil_geoguessr>`"
+            : "Cet utilisateur n'est pas enregistré", ephemeral: true
+        });
+        return;
+      }
+  
+      const data = await getGeoguessrData(user.geoguessrId);
+      const pinUrl = full ? data.user.fullBodyPin : data.user.pin.url;
+      const url = "https://www.geoguessr.com/images/gravity:ce/plain/" + pinUrl;
+      const attachment = new AttachmentBuilder(url, { name: "avatar.png" });
+      interaction.reply({ files: [attachment], ephemeral: true });
     }
-
-    const dbUser = await User.findOne({ userId: user.id });
-    if (!dbUser) {
-      interaction.reply({
-        content: user.id === getUser(interaction).id
-          ? "Vous n'êtes pas enregistré. Utilisez la commande `!register <votre_lien_de_profil_geoguessr>`"
-          : "Cet utilisateur n'est pas enregistré", ephemeral: true
-      });
-      return;
-    }
-
-    const data = await getGeoguessrData(dbUser.geoguessrId);
-    const pinUrl = full ? data.user.fullBodyPin : data.user.pin.url;
-    const url = "https://www.geoguessr.com/images/gravity:ce/plain/" + pinUrl;
-    const attachment = new AttachmentBuilder(url, { name: "avatar.png" });
-    interaction.reply({ files: [attachment], ephemeral: true });
   }
 };
 

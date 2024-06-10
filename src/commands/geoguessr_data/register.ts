@@ -1,6 +1,6 @@
 import { ChatInputCommandInteraction, Message, SlashCommandBuilder } from "discord.js";
 import User from "../../models/User";
-import { getUser } from "../../utils/get_info_from_command_or_message";
+import { getDbUser, getUser } from "../../utils/get_info_from_command_or_message";
 
 const registerCommand = new SlashCommandBuilder()
   .setName("register")
@@ -34,19 +34,21 @@ const register = {
       return;
     }
 
-    const find = await User.findOne({ userId: getUser(interaction).id });
+    const user = await getDbUser(interaction);
     const account = await User.findOne({ geoguessrId: geoguessrId });
     if (account) {
-      if (find && find.userId === account.userId) interaction.reply({ content: "Ce compte geoguessr est déjà lié à votre compte", ephemeral: true });
+      if (user && user.userId === account.userId) interaction.reply({ content: "Ce compte geoguessr est déjà lié à votre compte", ephemeral: true });
       else interaction.reply({ content: "Ce compte geoguessr est déjà lié à @" + account.userId, ephemeral: true });
       return;
     }
-    if (find) {
-      await User.updateOne({ userId: getUser(interaction).id }, { geoguessrId });
-      interaction.reply({ content: "Lien geoguessr mis à jour", ephemeral: true });
+
+    const isNew = user.geoguessrId == null;
+    user.geoguessrId = geoguessrId;
+    await user.save();
+    if (!isNew) {
+      await interaction.reply({ content: "Lien geoguessr mis à jour", ephemeral: true });
     } else {
-      await User.create({ userId: getUser(interaction).id, geoguessrId });
-      interaction.reply({ content: "Lien geoguessr enregistré", ephemeral: true });
+      await interaction.reply({ content: "Lien geoguessr enregistré", ephemeral: true });
     }    
   }
 };
