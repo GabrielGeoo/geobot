@@ -74,6 +74,12 @@ async function registerPrefixCommand(client: Client) {
         return;
       }
       try {
+        if (command.quizCommand) {
+          await Log.create({
+            message: "Un quiz '" + command.data.name + "' a été lancé par " + message.author.username + " dans le channel " + message.channel.id + " venant du message " + message.id,
+            date: new Date()
+          });
+        }
         await command.execute(message, args);
       } catch (error) {
         console.error(error);

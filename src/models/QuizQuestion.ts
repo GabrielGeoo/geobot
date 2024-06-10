@@ -36,7 +36,17 @@ export default class Quiz {
   public finishQuiz(interaction: ChatInputCommandInteraction | Message): void {
     if (this._timeout) clearTimeout(this._timeout);
     this._timeout = undefined;
-    interaction.channel?.send(`Quiz terminé ! Voici les scores ${this.score.size > 0 ? ":\n" : "."}${Array.from(this.score.entries()).map(([key, value]) => `<@${key}> : ${value}`).join(" points\n")}`);
+    let toSend = "Quiz terminé !";
+    if (this.score.size == 0) {
+      toSend += "\nAucun joueur n'a marqué de point."
+      interaction.channel?.send(toSend);
+    } else {
+      toSend += " Voici les scores :\n";
+      this.score.forEach((value, key) => {
+        toSend += `<@${key}> : ${value} points\n`;
+      });
+      interaction.channel?.send(toSend);
+    }
     QuizHandler.getInstance().removeQuiz(interaction.channel!.id);
   }
 
