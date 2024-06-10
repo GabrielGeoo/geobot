@@ -14,7 +14,7 @@ const classement = {
     data: classementCommand,
     async execute(interaction: ChatInputCommandInteraction | Message) {
       const user = await getDbUser(interaction);
-      if (user.userId = getUser(interaction).id) {
+      if (user.userId === getUser(interaction).id) {
         await interaction.reply(`Tu as ${user.quizTotalScore ?? 0} points.`);
       } else {
         await interaction.reply(`<@${user.userId}> a ${user.quizTotalScore ?? 0} points.`);
