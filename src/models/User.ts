@@ -11,6 +11,7 @@ const userSchema = new mongoose.Schema({
   rankData: { type: [rankDataSchema], required: false, default: []},
   coins: { type: Number, required: false, default: 0 },
   lastDaily: { type: Date, required: false, default: new Date(0) },
+  quizTotalScore: { type: Number, required: false, default: 0 },
 });
 
 type User = InferSchemaType<typeof userSchema>;

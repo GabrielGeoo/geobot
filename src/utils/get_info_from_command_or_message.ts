@@ -1,21 +1,23 @@
-import { ChatInputCommandInteraction, Message, User as DiscordUser } from "discord.js";
+import { ChatInputCommandInteraction, Message, User as DiscordUser, Snowflake } from "discord.js";
 import User from "../models/User";
 
 export function getUser(chat: ChatInputCommandInteraction | Message): DiscordUser {
   return chat instanceof Message ? chat.author : chat.user;
 }
 
-export async function getDbUser(interaction: ChatInputCommandInteraction | Message): Promise<any> {
-  let user;
+export async function getDbUser(interaction: ChatInputCommandInteraction | Message | Snowflake): Promise<any> {
+  let userId: Snowflake;
   if (interaction instanceof ChatInputCommandInteraction) {
-    user = interaction.options.getUser("user") ?? interaction.user;
+    userId = interaction.options.getUser("user")?.id ?? interaction.user.id;
+  } else if (interaction instanceof Message) {
+    userId = interaction.mentions.users.first()?.id ?? interaction.author.id;
   } else {
-    user = interaction.mentions.users.first() ?? interaction.author;
+    userId = interaction;
   }
 
-  const dbUser = await User.findOne({ userId: user.id });
+  const dbUser = await User.findOne({ userId: userId });
   if (!dbUser) {
-    return await User.create({ userId: user.id });
+    return await User.create({ userId: userId });
   }
 
   return dbUser;
