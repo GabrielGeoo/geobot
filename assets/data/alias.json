@@ -1,38 +1,150 @@
 [
-    {
-      "answer": "france",
-      "alias": ["fr"]
-    },
-    {
-      "answer": "papouasie_nouvelle_guinee",
-      "alias": ["png"]
-    },
-    {
-      "answer": "etats_unis",
-      "alias": ["usa"]
-    },
-    {
-      "answer": "nouvelle_zelande",
-      "alias": ["nz"]
-    },
-    {
-      "answer": "republique_centrafricaine",
-      "alias": ["rca", "centrafrique"]
-    },
-    {
-      "answer": "emirats_arabes_unis",
-      "alias": ["uae"]
-    },
-    {
-      "answer": "saint_vincent_et_les_grenadines",
-      "alias": ["saint_vincent"]
-    },
-    {
-      "answer": "saint_christophe_et_nieves",
-      "alias": ["saint_kitts_et_nevis", "saint_christophe"]
-    },
-    {
-      "answer": "republique_democratique_du_congo",
-      "alias": ["rdc"]
-    }
-  ]
+  {
+    "answer": "france",
+    "alias": ["fr","fra"]
+  },
+  {
+    "answer": "allemagne",
+    "alias": ["de","germany"]
+  },
+  {
+    "answer": "italie",
+    "alias": ["it","italy"]
+  },
+  {
+    "answer": "espagne",
+    "alias": ["es","spain"]
+  },
+  {
+    "answer": "portugal",
+    "alias": ["pt"]
+  },
+  {
+    "answer": "angleterre",
+    "alias": ["uk","england"]
+  },
+  {
+    "answer": "belgique",
+    "alias": ["be","belgium"]
+  },
+  {
+    "answer": "suisse",
+    "alias": ["ch","switzerland"]
+  },
+  {
+    "answer": "pays-bas",
+    "alias": ["nl","netherlands"]
+  },
+  {
+    "answer": "danemark",
+    "alias": ["dk","denmark"]
+  },
+  {
+    "answer": "norvège",
+    "alias": ["no","norway"]
+  },
+  {
+    "answer": "suède",
+    "alias": ["se","sweden"]
+  },
+  {
+    "answer": "finlande",
+    "alias": ["fi","finland"]
+  },
+  {
+    "answer": "islande",
+    "alias": ["is","iceland"]
+  },
+  {
+    "answer": "irlande",
+    "alias": ["ie","ireland"]
+  },
+  {
+    "answer": "luxembourg",
+    "alias": ["lu","lux"]
+  },
+  {
+    "answer": "autriche",
+    "alias": ["at"]
+  },
+  {
+    "answer": "république tchèque",
+    "alias": ["cz"]
+  },
+  {
+    "answer": "slovaquie",
+    "alias": ["sk"]
+  },
+  {
+    "answer": "slovénie",
+    "alias": ["si"]
+  },
+  {
+    "answer": "croatie",
+    "alias": ["hr"]
+  },
+  {
+    "answer": "bosnie-herzégovine",
+    "alias": ["ba"]
+  },
+  {
+    "answer": "monténégro",
+    "alias": ["me"]
+  },
+  {
+    "answer": "macédoine",
+    "alias": ["mk"]
+  },
+  {
+    "answer": "serbie",
+    "alias": ["rs"]
+  },
+  {
+    "answer": "bulgarie",
+    "alias": ["bg"]
+  },
+  {
+    "answer": "usa",
+    "alias": ["us"]
+  },
+  {
+    "answer": "canada",
+    "alias": ["ca"]
+  },
+  {
+    "answer": "mexique",
+    "alias": ["mx","mexico"]
+  },
+  {
+    "answer": "papouasie_nouvelle_guinee",
+    "alias": ["png"]
+  },
+  {
+    "answer": "etats_unis",
+    "alias": ["usa"]
+  },
+  {
+    "answer": "nouvelle_zelande",
+    "alias": ["nz"]
+  },
+  {
+    "answer": "republique_centrafricaine",
+    "alias": ["rca", "centrafrique"]
+  },
+  {
+    "answer": "emirats_arabes_unis",
+    "alias": ["uae"]
+  },
+  {
+    "answer": "saint_vincent_et_les_grenadines",
+    "alias": ["saint_vincent"]
+  },
+  {
+    "answer": "saint_christophe_et_nieves",
+    "alias": ["saint_kitts_et_nevis", "saint_christophe"]
+  },
+  {
+    "answer": "republique_democratique_du_congo",
+    "alias": ["rdc"]
+  }
+]
