@@ -4,103 +4,35 @@
       "alias": ["fr"]
     },
     {
-      "answer": "allemagne",
-      "alias": ["de"]
+      "answer": "papouasie_nouvelle_guinee",
+      "alias": ["png"]
     },
     {
-      "answer": "italie",
-      "alias": ["it"]
+      "answer": "etats_unis",
+      "alias": ["usa"]
     },
     {
-      "answer": "espagne",
-      "alias": ["es"]
+      "answer": "nouvelle_zelande",
+      "alias": ["nz"]
     },
     {
-      "answer": "portugal",
-      "alias": ["pt"]
+      "answer": "republique_centrafricaine",
+      "alias": ["rca", "centrafrique"]
     },
     {
-      "answer": "angleterre",
-      "alias": ["uk"]
+      "answer": "emirats_arabes_unis",
+      "alias": ["uae"]
     },
     {
-      "answer": "belgique",
-      "alias": ["be"]
+      "answer": "saint_vincent_et_les_grenadines",
+      "alias": ["saint_vincent"]
     },
     {
-      "answer": "suisse",
-      "alias": ["ch"]
+      "answer": "saint_christophe_et_nieves",
+      "alias": ["saint_kitts_et_nevis", "saint_christophe"]
     },
     {
-      "answer": "pays-bas",
-      "alias": ["nl"]
-    },
-    {
-      "answer": "danemark",
-      "alias": ["dk"]
-    },
-    {
-      "answer": "norvège",
-      "alias": ["no"]
-    },
-    {
-      "answer": "suède",
-      "alias": ["se"]
-    },
-    {
-      "answer": "finlande",
-      "alias": ["fi"]
-    },
-    {
-      "answer": "islande",
-      "alias": ["is"]
-    },
-    {
-      "answer": "irlande",
-      "alias": ["ie"]
-    },
-    {
-      "answer": "luxembourg",
-      "alias": ["lu"]
-    },
-    {
-      "answer": "autriche",
-      "alias": ["at"]
-    },
-    {
-      "answer": "république tchèque",
-      "alias": ["cz"]
-    },
-    {
-      "answer": "slovaquie",
-      "alias": ["sk"]
-    },
-    {
-      "answer": "slovénie",
-      "alias": ["si"]
-    },
-    {
-      "answer": "croatie",
-      "alias": ["hr"]
-    },
-    {
-      "answer": "bosnie-herzégovine",
-      "alias": ["ba"]
-    },
-    {
-      "answer": "monténégro",
-      "alias": ["me"]
-    },
-    {
-      "answer": "macédoine",
-      "alias": ["mk"]
-    },
-    {
-      "answer": "serbie",
-      "alias": ["rs"]
-    },
-    {
-      "answer": "bulgarie",
-      "alias": ["bg"]
+      "answer": "republique_democratique_du_congo",
+      "alias": ["rdc"]
     }
   ]

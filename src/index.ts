@@ -8,7 +8,7 @@ import log from "./utils/log";
 require('dotenv').config();
 
 process.on('unhandledRejection', (reason, promise) => {
-  log(client, "Unhandled rejection", `Unhandled rejection at: ${promise}, reason: ${reason}`);
+  log(client, "Unhandled rejection", `Unhandled rejection at: ${promise.toString()}, reason: ${reason}`);
 });
 process.on('uncaughtException', (error, origin) => {
   log(client, "Uncaught exception", `Caught exception: ${error}, origin: ${origin}`);
