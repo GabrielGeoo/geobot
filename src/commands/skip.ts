@@ -11,8 +11,7 @@ const skip = {
     const quiz = QuizManager.getInstance().getQuiz(interaction.channelId);
     if (quiz) {
       await interaction.reply(`Question passé. La réponse était: ${quiz.answer}`);
-      quiz.nextQuestion(interaction);
-      
+      await quiz.nextQuestion(interaction);
     } else {
       await interaction.reply({ content: "Vous n'avez pas de quiz en cours", ephemeral: true });
     }

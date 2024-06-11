@@ -9,6 +9,7 @@ export default class Quiz {
   private _score: Map<Snowflake, number>;
   private _data: QuizData;
   private _timeout?: NodeJS.Timeout;
+  private _waitingQuestion: boolean = false;
 
   constructor(name: string, question: string, color?: ColorResolvable) {
     this._data = new QuizData(name, question, color);
@@ -25,11 +26,18 @@ export default class Quiz {
     return this._score;
   }
 
-  public nextQuestion(interaction: ChatInputCommandInteraction | Message): void {
+  public get waitingQuestion(): boolean {
+    return this._waitingQuestion;
+  }
+
+  public async nextQuestion(interaction: ChatInputCommandInteraction | Message): Promise<void> {
     this._currentQuestion++;
     if (this.isFinished()) {
       this.finishQuiz(interaction)
     } else {
+      this._waitingQuestion = true;
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      this._waitingQuestion = false;
       this.sendCurrentQuestion(interaction);
     }
   }
@@ -51,7 +59,7 @@ export default class Quiz {
       this.score.forEach((value, key) => {
         toSend += `<@${key}> : ${value} points\n`;
       });
-      await interaction.channel?.send(toSend);
+      await interaction.channel?.send({ content: toSend, allowedMentions: { parse: [] }});
     }
     QuizHandler.getInstance().removeQuiz(interaction.channel!.id);
   }
@@ -85,7 +93,7 @@ export default class Quiz {
   public async sendCurrentQuestion(chat: ChatInputCommandInteraction | Message): Promise<void> {
     const img = new AttachmentBuilder("assets/images/" + this._data.name + "/" + this.currentQuestion.image).setName(normalizeString(this.currentQuestion.image));
     const embed = new EmbedBuilder()
-      .setTitle(this._data.question)
+      .setTitle(`${this._data.question} (${this._currentQuestion + 1}/${this._questions.length})`)
       .setImage("attachment://" + normalizeString(this.currentQuestion.image))
       .setColor(this._data.color);
     
@@ -94,9 +102,9 @@ export default class Quiz {
     }
 
     const response = await chat.channel?.send({ embeds: [embed], files: [img] });
-    this._timeout = setTimeout(() => {
+    this._timeout = setTimeout(async () => {
       chat.channel?.send(`Temps écoulé. La réponse était: ${this.answer}`);
-      this.nextQuestion(response as Message);
+      await this.nextQuestion(response as Message);
     }, 30000);
   }
 }
