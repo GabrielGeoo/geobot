@@ -10,6 +10,7 @@ export default class Quiz {
   private _data: QuizData;
   private _timeout?: NodeJS.Timeout;
   private _waitingQuestion: boolean = false;
+  private _afkQuestion: number = 0;
 
   constructor(name: string, question: string, color?: ColorResolvable) {
     this._data = new QuizData(name, question, color);
@@ -30,9 +31,14 @@ export default class Quiz {
     return this._waitingQuestion;
   }
 
+  public resetAfkQuestion(): void {
+    this._afkQuestion = 0;
+  }
+
   public async nextQuestion(interaction: ChatInputCommandInteraction | Message): Promise<void> {
     this._currentQuestion++;
-    if (this.isFinished()) {
+    this._afkQuestion++;
+    if (this.isFinished() || this._afkQuestion > 3) {
       this.finishQuiz(interaction)
     } else {
       this._waitingQuestion = true;

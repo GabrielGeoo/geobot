@@ -146,5 +146,10 @@
   {
     "answer": "republique_democratique_du_congo",
     "alias": ["rdc"]
+  },
+
+  {
+    "answer": "belfort",
+    "alias": ["territoire_de_belfort"]
   }
 ]
