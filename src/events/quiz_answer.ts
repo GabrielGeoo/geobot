@@ -10,6 +10,7 @@ module.exports = {
     const quiz = QuizHandler.getInstance().getQuiz(message.channel.id);
     if (!quiz || quiz.waitingQuestion) return;
 
+    quiz.resetAfkQuestion();
     if (quiz.isCorrectAnswer(message.content)) {
       message.react('✅');
       quiz.addPoint(message.author.id);
