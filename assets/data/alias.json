@@ -196,5 +196,48 @@
     "answer": "Northwest_territories",
     "alias": ["nt","terrtoires_du_nord_ouest"]
   },
-  
+  {
+    "answer": "bachkirie",
+    "alias": ["bashkortostan","bashkor"]
+  },
+  {
+    "answer": "briansk",
+    "alias": ["bryansk"]
+  },
+  {
+    "answer": "bouriatie",
+    "alias": ["buryatia","bur"]
+  },
+  {
+    "answer": "carelie",
+    "alias": ["karelia"]
+  },
+  {
+    "answer": "iamalie",
+    "alias": ["yamalo","yamalo_nenets"]
+  },
+  {
+    "answer": "Iaroslavl",
+    "alias": ["Yaroslavl","yaro"]
+  },
+  {
+    "answer": "ingouchie",
+    "alias": ["ingushetia","ibratv"]
+  },
+  {
+    "answer": "dagestan",
+    "alias": ["dag","khabib"]
+  },
+  {
+    "answer": "irkoutsk",
+    "alias": ["irkustk"]
+  },
+  {
+    "answer": "kabardino_balkarie",
+    "alias": ["kab","kabardino"]
+  },
+  {
+    "answer": "Mourmansk",
+    "alias": ["murmansk"]
+  },
 ]
