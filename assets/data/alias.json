@@ -121,7 +121,7 @@
   },
   {
     "answer": "etats_unis",
-    "alias": ["usa"]
+    "alias": ["usa", "us"]
   },
   {
     "answer": "nouvelle_zelande",
@@ -151,5 +151,50 @@
   {
     "answer": "belfort",
     "alias": ["territoire_de_belfort"]
-  }
+  },
+  {
+    "answer": "Prince_Edward_Island",
+    "alias": ["pei","ile_du_prince_edouard"]
+  },
+  {
+    "answer": "British_Columbia",
+    "alias": ["bc","colombie_britannique"]
+  },
+  {
+    "answer": "Nova_Scotia",
+    "alias": ["ns","nouvelle_ecosse"]
+  },
+  {
+    "answer": "New_Brunswick",
+    "alias": ["nb","nouveau_brunswick"]
+  },
+  {
+    "answer": "Newfoundland_and_labrador",
+    "alias": ["newfie"]
+  },
+  {
+    "answer": "quebec",
+    "alias": ["qc"]
+  },
+  {
+    "answer": "ontario",
+    "alias": ["on"]
+  },
+  {
+    "answer": "Manitoba",
+    "alias": ["mb"]
+  },
+  {
+    "answer": "Saskatchewan",
+    "alias": ["sk"]
+  },
+  {
+    "answer": "alberta",
+    "alias": ["ab"]
+  },
+  {
+    "answer": "Northwest_territories",
+    "alias": ["nt","terrtoires_du_nord_ouest"]
+  },
+  
 ]
