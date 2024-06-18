@@ -51,11 +51,11 @@ export default class Quiz {
   public async finishQuiz(interaction: ChatInputCommandInteraction | Message): Promise<void> {
     if (this._timeout) clearTimeout(this._timeout);
     this._timeout = undefined;
-    // for (let [userId, score] of this._score) {
-    //   const dbUser = await getDbUser(userId);
-    //   dbUser.quizTotalScore += score;
-    //   await dbUser.save();
-    // }
+    for (let [userId, score] of this._score) {
+      const dbUser = await getDbUser(userId);
+      dbUser.quizTotalScore += score;
+      await dbUser.save();
+    }
     let toSend = "Quiz terminé !";
     if (this.score.size == 0) {
       toSend += "\nAucun joueur n'a marqué de point."
