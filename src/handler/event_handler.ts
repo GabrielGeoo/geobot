@@ -4,7 +4,7 @@ import path from "path";
 
 export default function registerEvents(client: Client): void {
   console.log("Registering events...");
-  const eventFiles = getFiles(path.join(__dirname, "..", "events"));
+  const eventFiles = getFiles(path.join(__dirname, "..", "events"), {extensions: [".ts", ".js"]});
 
   for (const eventFile of eventFiles) {
     const event = require(eventFile);

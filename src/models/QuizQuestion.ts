@@ -51,11 +51,11 @@ export default class Quiz {
   public async finishQuiz(interaction: ChatInputCommandInteraction | Message): Promise<void> {
     if (this._timeout) clearTimeout(this._timeout);
     this._timeout = undefined;
-    for (let [userId, score] of this._score) {
-      const dbUser = await getDbUser(userId);
-      dbUser.quizTotalScore += score;
-      await dbUser.save();
-    }
+    // for (let [userId, score] of this._score) {
+    //   const dbUser = await getDbUser(userId);
+    //   dbUser.quizTotalScore += score;
+    //   await dbUser.save();
+    // }
     let toSend = "Quiz terminé !";
     if (this.score.size == 0) {
       toSend += "\nAucun joueur n'a marqué de point."
@@ -97,10 +97,11 @@ export default class Quiz {
   }
 
   public async sendCurrentQuestion(chat: ChatInputCommandInteraction | Message): Promise<void> {
-    const img = new AttachmentBuilder("assets/images/" + this._data.name + "/" + this.currentQuestion.image).setName(normalizeString(this.currentQuestion.image));
+    const imgName = normalizeString(this.currentQuestion.image.split(/[\/\\]/)[this.currentQuestion.image.split(/[\/\\]/).length - 1]);
+    const img = new AttachmentBuilder("assets/images/" + this._data.name + "/" + this.currentQuestion.image).setName(imgName);
     const embed = new EmbedBuilder()
       .setTitle(`${this._data.question} (${this._currentQuestion + 1}/${this._questions.length})`)
-      .setImage("attachment://" + normalizeString(this.currentQuestion.image))
+      .setImage("attachment://" + normalizeString(this.currentQuestion.image.split(/[\/\\]/)[this.currentQuestion.image.split(/[\/\\]/).length - 1]))
       .setColor(this._data.color);
     
     if (this._timeout) {
