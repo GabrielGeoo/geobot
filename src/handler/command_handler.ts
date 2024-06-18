@@ -10,7 +10,7 @@ require('dotenv').config();
 
 export default async function registerCommands(client: Client): Promise<void> {
   console.log("Registering commands...");
-  const commandFiles = getFiles(path.join(__dirname, "..", "commands"));
+  const commandFiles = getFiles(path.join(__dirname, "..", "commands"), {extensions: [".ts", ".js"]});
 
   for (const commandFile of commandFiles) {
     const command = require(commandFile).default;
@@ -18,7 +18,7 @@ export default async function registerCommands(client: Client): Promise<void> {
   }
 
   //ajout des commandes de quiz
-  const quizFiles = getFiles(path.join(__dirname, "../..", "assets/data/commands"), "json");
+  const quizFiles = getFiles(path.join(__dirname, "../..", "assets/data/commands"), {extensions: "json"});
   for (const quizFile of quizFiles) {
     const data = await fs.readFile(quizFile, "utf8");
     const json = JSON.parse(data);
