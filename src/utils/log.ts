@@ -7,7 +7,7 @@ export default async function log(client: Client, title: string, desc: string) {
       const embed = new EmbedBuilder()
         .setTitle(title)
         .setDescription(desc)
-        .setColor("#FF0000")
+        .setColor("#0000FF")
         .setTimestamp();
 
       channel.send({ embeds: [embed] });

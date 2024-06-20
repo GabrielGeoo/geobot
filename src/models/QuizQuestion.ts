@@ -51,7 +51,7 @@ export default class Quiz {
   public async finishQuiz(interaction: ChatInputCommandInteraction | Message): Promise<void> {
     if (this._timeout) clearTimeout(this._timeout);
     this._timeout = undefined;
-    for (let [userId, score] of this._score) {
+    for (let [userId, score] of this.score) {
       const dbUser = await getDbUser(userId);
       dbUser.quizTotalScore += score;
       await dbUser.save();
@@ -61,8 +61,9 @@ export default class Quiz {
       toSend += "\nAucun joueur n'a marqué de point."
       await interaction.channel?.send(toSend);
     } else {
+      const scoreSorted = new Map([...this.score.entries()].sort((a, b) => b[1] - a[1]));
       toSend += " Voici les scores :\n";
-      this.score.forEach((value, key) => {
+      scoreSorted.forEach((value, key) => {
         toSend += `<@${key}> : ${value} points\n`;
       });
       await interaction.channel?.send({ content: toSend, allowedMentions: { parse: [] }});

@@ -3,9 +3,7 @@ import QuizManager from "../handler/quiz_handler";
 import getFiles from "./get_files";
 import path from "path";
 import normalizeString from "./normalize_string";
-import assert from "assert";
 import getAlias from "./get_alias";
-import Quiz from "../models/QuizQuestion";
 
 export default function buildQuizCommand(data: any): any {
   const command = new SlashCommandBuilder()
@@ -28,14 +26,11 @@ export default function buildQuizCommand(data: any): any {
       return [interaction.options.getNumber("questions_number")?.toString() ?? "1", interaction.options.getString("sous_quiz", false)];
     },
     async execute(interaction: ChatInputCommandInteraction | Message, args: string[]) {
-      const questionsNumber = args[0] ? parseInt(args[0]) : 1;
-      if (isNaN(questionsNumber)) {
-        interaction.reply("Précisez un nombre de questions avant un sous-quiz. ``!quiz <nombre> <sous-quiz>``");
-        return;
-      }
+      let questionsNumber = args[0] ? parseInt(args[0]) : 1;
       let sousQuiz;
       if (isNaN(questionsNumber)) {
         sousQuiz = args.join(" ");
+        questionsNumber = 1;
       } else if (questionsNumber < 1) {
         await interaction.reply("Le nombre de questions doit être supérieur à 1.");
         return;
@@ -50,7 +45,7 @@ export default function buildQuizCommand(data: any): any {
         return;
       }
 
-      const files = getFiles(path.join(__dirname, "../..", "assets/images/" + data.command + (sousQuiz ? `/${sousQuiz}` : "")), {recursive: false, complete: true});
+      const files = getFiles(path.join(__dirname, "../..", "assets/images/" + data.command + (sousQuiz ? `/${normalizeString(sousQuiz)}` : "")), {recursive: false, complete: true});
       if (files.length === 0) {
         await interaction.reply("Ce quiz n'existe pas.");
         return;
