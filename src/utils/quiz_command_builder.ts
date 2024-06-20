@@ -46,7 +46,6 @@ export default function buildQuizCommand(data: any): any {
         return;
       }
       
-      log(interaction.client, "chemin", path.join(__dirname, "../..", "assets/images/" + data.command + (sousQuiz ? `/${normalizeString(sousQuiz)}` : "")), true);
       const files = getFiles(path.join(__dirname, "../..", "assets/images/" + data.command + (sousQuiz ? `/${normalizeString(sousQuiz)}` : "")), {recursive: false, complete: true});
       if (files.length === 0) {
         await interaction.reply("Ce quiz n'existe pas.");
