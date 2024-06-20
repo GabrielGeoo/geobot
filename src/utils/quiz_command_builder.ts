@@ -4,6 +4,7 @@ import getFiles from "./get_files";
 import path from "path";
 import normalizeString from "./normalize_string";
 import getAlias from "./get_alias";
+import log from "./log";
 
 export default function buildQuizCommand(data: any): any {
   const command = new SlashCommandBuilder()
@@ -44,7 +45,8 @@ export default function buildQuizCommand(data: any): any {
         await interaction.reply("Un quiz est déjà en cours dans ce channel !");
         return;
       }
-
+      
+      log(interaction.client, "chemin", path.join(__dirname, "../..", "assets/images/" + data.command + (sousQuiz ? `/${normalizeString(sousQuiz)}` : "")), true);
       const files = getFiles(path.join(__dirname, "../..", "assets/images/" + data.command + (sousQuiz ? `/${normalizeString(sousQuiz)}` : "")), {recursive: false, complete: true});
       if (files.length === 0) {
         await interaction.reply("Ce quiz n'existe pas.");
