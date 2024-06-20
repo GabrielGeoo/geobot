@@ -29,6 +29,7 @@ export default function normalizeString(input: string): string {
   normalized = replaceAccents(normalized); // Remplacer les accents
   normalized = normalized.toLowerCase();   // Transformer les majuscules en minuscules
   normalized = normalized.replace(/\s+/g, '_'); // Remplacer les espaces par des underscores
+  normalized = normalized.replace("'", '_'); // Remplacer les apostrophes par des underscores
 
   return normalized;
 }
