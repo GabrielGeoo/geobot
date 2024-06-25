@@ -31,7 +31,7 @@ const avatar = {
       }
   
       const data = await getGeoguessrData(user.geoguessrId);
-      const pinUrl = full ? data.user.fullBodyPin : data.user.pin.url;
+      const pinUrl = full ? data.fullBodyPin : data.pin.url;
       const url = "https://www.geoguessr.com/images/gravity:ce/plain/" + pinUrl;
       const attachment = new AttachmentBuilder(url, { name: "avatar.png" });
       interaction.reply({ files: [attachment], ephemeral: true });

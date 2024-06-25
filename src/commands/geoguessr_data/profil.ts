@@ -25,23 +25,23 @@ const profil = {
       }
       const data = await getGeoguessrData(user.geoguessrId);
 
-      const url = "https://www.geoguessr.com/images/gravity:ce/plain/" + data.user.pin.url;
+      const url = "https://www.geoguessr.com/images/gravity:ce/plain/" + data.pin.url;
       const buffer = getLevelImage(data);
       const attachment = new AttachmentBuilder(buffer, { name: "level.png" });
   
       const rankData = await getRankData(data, user, interaction.client);
   
       const guild = await interaction.client.guilds.fetch("728006388936081528");
-      const creatorEmoji = data.user.isCreator ? guild.emojis.cache.get("1248754956891066389") : "";
-      const verifiedEmoji = data.user.isVerified ? guild.emojis.cache.get("1248754481324101692") : "";
+      const creatorEmoji = data.isCreator ? guild.emojis.cache.get("1248754956891066389") : "";
+      const verifiedEmoji = data.isVerified ? guild.emojis.cache.get("1248754481324101692") : "";
   
       const embed = new EmbedBuilder()
-        .setTitle(`Profil de ${data.user.nick} ${verifiedEmoji} ${creatorEmoji}`)
+        .setTitle(`Profil de ${data.nick} ${verifiedEmoji} ${creatorEmoji}`)
         .setDescription(rankData)
         .setThumbnail(url)
         .setColor("#2ECC71")
         .setImage("attachment://level.png")
-        .setTimestamp(new Date(data.user.created))
+        .setTimestamp(new Date(data.created))
         
       interaction.reply({ embeds: [embed], files: [attachment], ephemeral: true});
     }
