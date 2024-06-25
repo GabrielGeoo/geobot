@@ -1,9 +1,9 @@
 import { createCanvas } from "canvas";
 
 export default function getLevelImage(data: any) {
-    const level = data.user.progress.level;
-    const currentXp = data.user.progress.xp - data.user.progress.levelXp;
-    const nextLevelXp = data.user.progress.nextLevelXp - data.user.progress.levelXp;
+    const level = data.progress.level;
+    const currentXp = data.progress.xp - data.progress.levelXp;
+    const nextLevelXp = data.progress.nextLevelXp - data.progress.levelXp;
     const width = 4000;
     const height = 320;
     const canvas = createCanvas(width, height);
