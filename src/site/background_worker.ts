@@ -18,7 +18,7 @@ export default function startBackgroundWorker() {
         break;
       case "/registerRanked": 
         registerRankData();
-        res.end();
+        res.end('registerRanked');
         break;
       default:
         res.write('404');
