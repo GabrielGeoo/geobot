@@ -1,4 +1,4 @@
-import { ChatInputCommandInteraction, Message, SlashCommandBuilder, PermissionFlagsBits } from "discord.js";
+import { ChatInputCommandInteraction, Message, SlashCommandBuilder, PermissionFlagsBits, EmbedBuilder, ButtonBuilder, ButtonStyle, ActionRowBuilder } from "discord.js";
 import Pari from "../../models/Pari";
 
 const setPariCommand = new SlashCommandBuilder()
@@ -58,7 +58,40 @@ const setPari = {
           return;
         }
         await Pari.create({ pariName: pari, date });
-        await interaction.reply(`Le pari "${pari}" a été créé pour le ${date.toLocaleString()}`);
+        if (interaction instanceof Message) {
+          await interaction.delete();
+        }
+
+        const embed = new EmbedBuilder()
+          .setTitle(pari)
+          .setDescription(`Date limite pour parier : ${date.toLocaleString()}`)
+          .setColor("#0099FF")
+          .setTimestamp();
+
+        const parier = new ButtonBuilder()
+          .setCustomId("pari/" + pari)
+          .setLabel("Parier")
+          .setStyle(ButtonStyle.Primary)
+          .setEmoji("💰");
+        
+        const deletePari = new ButtonBuilder()
+          .setCustomId("deletePari/" + pari)
+          .setLabel("Supprimer")
+          .setStyle(ButtonStyle.Danger)
+          .setEmoji("🗑️");
+        
+        const row = new ActionRowBuilder<ButtonBuilder>().addComponents(parier, deletePari);
+        
+        if (interaction instanceof Message && interaction.attachments.size > 0) {
+          embed.setImage(interaction.attachments.first()!.url);
+          await interaction.channel?.send({ embeds: [embed], components: [row], files: [interaction.attachments.first()!] });
+        } else {
+          await interaction.channel?.send({ embeds: [embed], components: [row]});
+        }
+
+        if (interaction instanceof ChatInputCommandInteraction) {
+          await interaction.deferReply({ ephemeral: true });
+        }
 
         break;
       }

@@ -56,8 +56,6 @@ async function registerSlashCommand(client: Client) {
           await interaction.reply({ content: 'There was an error while executing this command!', ephemeral: true });
         }
       }
-    } else {
-      console.error(`Unknown interaction type: ${interaction.type}`);
     }
   });
 }
