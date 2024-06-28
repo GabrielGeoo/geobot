@@ -1,7 +1,22 @@
-import { ChartConfiguration } from "chart.js";
+import { Chart, ChartConfiguration, Plugin } from "chart.js";
 import { ChartJSNodeCanvas } from "chartjs-node-canvas";
+import 'chartjs-adapter-moment';
 import { ChatInputCommandInteraction, Message, SlashCommandBuilder } from "discord.js";
 import * as fs from 'fs';
+import { getDbUser, getUser } from "../../utils/get_info_from_command_or_message";
+
+const chartJSNodeCanvas = new ChartJSNodeCanvas({ width: 1000, height: 600 });
+
+const plugin: Plugin = {
+  id: 'customCanvasBackgroundColor',
+  beforeDraw: (chart: Chart) => {
+    const {ctx} = chart;
+    ctx.save();
+    ctx.fillStyle = '#ffffff';
+    ctx.fillRect(0, 0, chart.width, chart.height);
+    ctx.restore();
+  }
+};
 
 const rankgraphCommand = new SlashCommandBuilder()
   .setName("rankgraph")
@@ -10,42 +25,87 @@ const rankgraphCommand = new SlashCommandBuilder()
 const rankgraph = {
   data: rankgraphCommand,
   async execute(interaction: ChatInputCommandInteraction | Message) {
-    const width = 800;
-    const height = 600;
-    const chartJSNodeCanvas = new ChartJSNodeCanvas({ width, height });
+    const user = await getDbUser(interaction);
+    const rankdata = user.rankData;
+    
+    if (!user.geoguessrId) {
+      await interaction.reply({
+        content: user.userId === getUser(interaction).id
+          ? "Vous n'êtes pas enregistré. Utilisez la commande `!register <votre_lien_de_profil_geoguessr>`"
+          : "Cet utilisateur n'est pas enregistré", ephemeral: true
+      });
+      return;
+    }
+
+    if (rankdata.length <= 1) {
+      if (rankdata.length === 0) {
+        interaction.reply("Vous n'avez pas de donnée enregistrée");
+      } else {
+        interaction.reply("Vous n'avez qu'une donnée enregistrée, revenez demain, les données sont enregistrés chaque jour");
+      }
+      return;
+    }
+
+    const dates = Array.from({ length: 4 }, (_, i) => new Date(Date.now() - i * 24 * 60 * 60 * 1000));
+    const labels = dates.map((date) => new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate())));
+    const min = new Date(Math.min(...labels.map(date => new Date(date).getTime())));
+    min.setDate(min.getDate() - 1);
+    const max = new Date(Math.max(...labels.map(date => new Date(date).getTime())));
 
     const configuration: ChartConfiguration = {
       type: 'line',
       data: {
-        labels: [new Date(2021, 0, 1), new Date(2021, 0, 2), new Date(2021, 0, 3), new Date(2021, 0, 4), new Date(2021, 0, 5)],
+        labels: labels,
+        //rankdata.map((data: any) => data.date as Date),
         datasets: [{
           label: 'Score',
-          data: [10, 20, 30, 40, 50],
-          fill: false,
+          data: [1407, 1420, 1316, 1367],
+          //rankdata.map((data: any) => data.rating),
           borderColor: 'rgb(75, 192, 192)',
-          tension: 0.1
+          radius: 0,
+          borderWidth: 5,
         }]
       },
       options: {
+        layout: {
+          padding: 20
+        },
         scales: {
           x: {
             type: 'time',
             time: {
               unit: 'day'
             },
+            min: min.toISOString().split('T')[0] + " 22:00:00",
+            max: max.toISOString().split('T')[0] + " 05:00:00",
             title: {
-              display: true,
-              text: 'Date'
+              display: false,
+            },
+            ticks: {
+              source: 'labels',
+              font: {
+                size: 16
+              }
             }
           },
           y: {
             title: {
-              display: true,
-              text: 'Score'
+              display: false,
+            },
+            ticks: {
+              font: {
+                size: 16
+              }
             }
           }
+        },
+        plugins: {
+          legend: {
+            display: false
+          }
         }
-      }
+      },
+      plugins: [plugin],
     };
 
     const image = await chartJSNodeCanvas.renderToBuffer(configuration);
