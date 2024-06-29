@@ -6,6 +6,7 @@ const pariSchema = new mongoose.Schema({
   bettors: {type: [{
     userId: {type: String, required: true},
     bet: {type: String, required: true},
+    coins: {type: Number, required: true},
   }], required: true, default: []},
 });
 
