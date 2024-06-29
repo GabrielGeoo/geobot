@@ -16,23 +16,29 @@ const help = {
   async execute(interaction: ChatInputCommandInteraction | Message, args: string[]) {
     let embed;
     if (args.length > 0) {
-      const command = commands.get().find(c => c.data.name === args[0]);
-      if (!command) {
-        interaction.reply({ content: "Commande inconnue", ephemeral: true });
-        return;
+      if (args[0] === "quiz") {
+        embed = new EmbedBuilder()
+        .setTitle("Liste des quiz")
+        .setDescription(commands.get().filter(c => c.quizCommand).map((command) => getStringCommand(command.data)).join("\n"));
+      } else {
+        const command = commands.get().find(c => c.data.name === args[0]);
+        if (!command) {
+          interaction.reply({ content: "Commande inconnue", ephemeral: true });
+          return;
+        }
+        embed = new EmbedBuilder()
+          .setTitle(config.prefix + command.data.name)
+          .addFields([
+            {
+              name: "Description",
+              value: command.data.description,
+            },
+            {
+              name: "Utilisation",
+              value: getUseCommand(command.data),
+            }
+          ]);
       }
-      embed = new EmbedBuilder()
-        .setTitle(command.data.name)
-        .addFields([
-          {
-            name: "Description",
-            value: command.data.description,
-          },
-          {
-            name: "Utilisation",
-            value: getUseCommand(command.data),
-          }
-        ]);
     } else {
       embed = new EmbedBuilder()
         .addFields([

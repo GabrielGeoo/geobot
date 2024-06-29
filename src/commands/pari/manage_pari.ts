@@ -50,6 +50,10 @@ const setPari = {
           await interaction.reply("La date doit être au format jj-mm-aaaa+hh:mm");
           return;
         }
+        if (date < new Date()) {
+          await interaction.reply("La date doit être supérieure à la date actuelle");
+          return;
+        }
 
         const pari = args.slice(2).join(" ");
         const existingPari = await Pari.findOne({ pariName: pari });
