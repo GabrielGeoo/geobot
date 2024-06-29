@@ -2,6 +2,7 @@ import { AttachmentBuilder, ChatInputCommandInteraction, ColorResolvable, EmbedB
 import normalizeString from "../utils/normalize_string";
 import QuizHandler from "../handler/quiz_handler";
 import { getDbUser } from "../utils/get_info_from_command_or_message";
+import Timer, { TimeCounter } from "easytimer.js";
 
 export default class Quiz {
   private _questions: QuizQuestion[];
@@ -11,6 +12,7 @@ export default class Quiz {
   private _timeout?: NodeJS.Timeout;
   private _waitingQuestion: boolean = false;
   private _afkQuestion: number = 0;
+  private _timer: Timer = new Timer();
 
   constructor(name: string, question: string, color?: ColorResolvable) {
     this._data = new QuizData(name, question, color);
@@ -31,11 +33,17 @@ export default class Quiz {
     return this._waitingQuestion;
   }
 
+  public get time(): TimeCounter {
+    return this._timer.getTimeValues();
+  }
+
   public resetAfkQuestion(): void {
     this._afkQuestion = 0;
   }
 
   public async nextQuestion(interaction: ChatInputCommandInteraction | Message): Promise<void> {
+    this._timer.stop();
+    this._timer.reset();
     this._currentQuestion++;
     this._afkQuestion++;
     if (this.isFinished() || this._afkQuestion > 3) {
@@ -110,6 +118,7 @@ export default class Quiz {
     }
 
     const response = await chat.channel?.send({ embeds: [embed], files: [img] });
+    this._timer.start();
     this._timeout = setTimeout(async () => {
       chat.channel?.send(`Temps écoulé. La réponse était: ${this.answer}`);
       await this.nextQuestion(response as Message);
