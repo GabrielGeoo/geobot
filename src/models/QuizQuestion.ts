@@ -10,7 +10,6 @@ export default class Quiz {
   private _score: Map<Snowflake, number>;
   private _data: QuizData;
   private _timeout?: NodeJS.Timeout;
-  private _waitingQuestion: boolean = false;
   private _afkQuestion: number = 0;
   private _timer: Timer = new Timer();
 
@@ -29,10 +28,6 @@ export default class Quiz {
     return this._score;
   }
 
-  public get waitingQuestion(): boolean {
-    return this._waitingQuestion;
-  }
-
   public get time(): TimeCounter {
     return this._timer.getTimeValues();
   }
@@ -49,9 +44,7 @@ export default class Quiz {
     if (this.isFinished() || this._afkQuestion > 3) {
       this.finishQuiz(interaction)
     } else {
-      this._waitingQuestion = true;
       await new Promise(resolve => setTimeout(resolve, 1000));
-      this._waitingQuestion = false;
       this.sendCurrentQuestion(interaction);
     }
   }
