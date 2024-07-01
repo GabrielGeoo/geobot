@@ -4,6 +4,8 @@ import registerEvents from "./handler/event_handler";
 import startBackgroundWorker from "./site/background_worker";
 import mongoose from "mongoose";
 import log from "./utils/log";
+import { GridFSBucket } from 'mongodb';
+import FileHandler from "./handler/file_handler";
 
 require('dotenv').config();
 
@@ -29,11 +31,15 @@ const client = new Client({
   ]
 });
 
+let gfs: GridFSBucket;
+
 async function main() {
   try {
     console.log('Starting bot...');
     await mongoose.connect(process.env.MONGODB_URI!, {dbName: "GeoBot"});
     console.log('Connected to MongoDB');
+    gfs = new GridFSBucket(mongoose.connection.db, { bucketName: 'images' });
+    FileHandler.init(gfs);
     await registerEvents(client);
     await registerCommands(client);
     client.login(process.env.BOT_TOKEN);

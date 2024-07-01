@@ -4,7 +4,7 @@ import registerRankData from '../utils/geoguessr_data/register_rank_data';
 
 export default function startBackgroundWorker() {
   http.createServer((req, res) => {
-    switch (req.url) {
+    switch (req.url?.split('?')[0]) {
       case '/':
         res.write('Hello World');
         res.end();
