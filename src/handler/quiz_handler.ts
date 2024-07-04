@@ -1,5 +1,6 @@
 import { ColorResolvable, Snowflake } from "discord.js";
-import Quiz from "../models/QuizQuestion";
+import Quiz from "../models/Quiz";
+import BaseQuiz from "../models/BaseQuiz";
 
 export default class QuizHandler {
 
@@ -15,11 +16,11 @@ export default class QuizHandler {
     return this.instance;
   }
 
-  public createQuiz(channelId: Snowflake, name: string, question: string, color?: ColorResolvable): void {
+  public createQuiz(channelId: Snowflake, quiz: Quiz): void {
     if (this._data.has(channelId)) {
       throw new Error("Quiz already exist");
     } else { 
-      this._data.set(channelId, new Quiz(name, question, color));
+      this._data.set(channelId, quiz);
     }
   }
 

@@ -1,5 +1,5 @@
 import { ChatInputCommandInteraction, Message, SlashCommandBuilder, PermissionFlagsBits, EmbedBuilder, ButtonBuilder, ButtonStyle, ActionRowBuilder } from "discord.js";
-import Pari from "../../models/Pari";
+import Pari from "../../models/database/Pari";
 
 const setPariCommand = new SlashCommandBuilder()
   .setName("pari")

@@ -1,5 +1,5 @@
 import { Client } from "discord.js";
-import Division from "../../models/Division";
+import Division from "../../models/database/Division";
 import getGeoguessrStats from "./geoguessr_stats";
 
 export default async function getRankDataString(data: any, user: any, client: Client) {

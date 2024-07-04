@@ -1,7 +1,10 @@
-import { AttachmentBuilder, ChatInputCommandInteraction, Message, SlashCommandBuilder } from "discord.js";
+import { ChatInputCommandInteraction, Message, SlashCommandBuilder } from "discord.js";
 import puppeteer from 'puppeteer';
 import fs from 'fs';
 import FileHandler from "../handler/file_handler";
+import QuizHandler from "../handler/quiz_handler";
+import GeoQuiz from "../models/GeoQuiz";
+import getLocalization from "../utils/get_localization";
 require('dotenv').config();
 
 const mapsCommand = new SlashCommandBuilder()
@@ -11,6 +14,11 @@ const mapsCommand = new SlashCommandBuilder()
 const maps = {
   data: mapsCommand,
   async execute(interaction: ChatInputCommandInteraction | Message) {
+    const quizAnswer = QuizHandler.getInstance().getQuiz(interaction.channelId);
+    if (quizAnswer) {
+      await interaction.reply("Un quiz est déjà en cours dans ce channel !");
+      return;
+    }
     if (interaction instanceof ChatInputCommandInteraction) interaction.deferReply();
 
     const now = new Date();
@@ -43,14 +51,12 @@ const maps = {
       buffer = fs.readFileSync(fileName);
     }
 
-    const attachment = new AttachmentBuilder(buffer).setName(fileName);
-    if (interaction instanceof ChatInputCommandInteraction) {
-      await interaction.editReply({ files: [attachment] });
-    } else {
-      await interaction.reply({ files: [attachment] });
-    }
+    QuizHandler.getInstance().createQuiz(interaction.channelId, new GeoQuiz());
+    const localization = await getLocalization(coord.lat, coord.lng);
+    QuizHandler.getInstance().getQuiz(interaction.channelId)?.addQuestion([localization.country], buffer);
+    await QuizHandler.getInstance().getQuiz(interaction.channelId)?.sendCurrentQuestion(interaction);
 
-    console.log(`Maps command executed with ${dbImage == null} in ${(new Date().getTime() - now.getTime())/1000}s`);
+    console.log(`Maps command executed with ${dbImage == null} in ${(new Date().getTime() - now.getTime()) / 1000}s`);
 
     if (!dbImage) {
       await FileHandler.writeImage(buffer, fileName);

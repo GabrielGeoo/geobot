@@ -1,5 +1,5 @@
-import { ButtonInteraction, Client, GuildMember, ModalSubmitInteraction, PermissionFlagsBits } from "discord.js";
-import Pari from "../models/Pari";
+import { ButtonInteraction, Client, GuildMember, PermissionFlagsBits } from "discord.js";
+import Pari from "../models/database/Pari";
 
 module.exports = {
   name: ButtonInteraction,

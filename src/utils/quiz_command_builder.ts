@@ -4,6 +4,7 @@ import getFiles from "./get_files";
 import path from "path";
 import normalizeString from "./normalize_string";
 import getAlias from "./get_alias";
+import BaseQuiz from "../models/BaseQuiz";
 
 export default function buildQuizCommand(data: any): any {
   const command = new SlashCommandBuilder()
@@ -77,7 +78,7 @@ export default function buildQuizCommand(data: any): any {
       }
 
       //build quiz
-      QuizManager.getInstance().createQuiz(channelId, data.command, data.question, data.color);
+      QuizManager.getInstance().createQuiz(channelId, new BaseQuiz(data.command, data.question, data.color));
       for (let i = 0; i < questionsNumber; i++) {
         const random = Math.floor(Math.random() * allAnswers.length);
         const alias = await getAlias(allAnswers[random].answer);

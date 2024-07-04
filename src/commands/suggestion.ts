@@ -1,5 +1,5 @@
 import { ChatInputCommandInteraction, EmbedBuilder, Message, SlashCommandBuilder } from "discord.js";
-import Suggestion from "../models/Suggestion";
+import Suggestion from "../models/database/Suggestion";
 import { getUser } from "../utils/get_info_from_command_or_message";
 
 const suggestionCommand = new SlashCommandBuilder()

@@ -1,5 +1,5 @@
 import { Client, ModalSubmitInteraction } from "discord.js";
-import Pari from "../models/Pari";
+import Pari from "../models/database/Pari";
 import { getDbUser } from "../utils/get_info_from_command_or_message";
 
 module.exports = {
