@@ -14,6 +14,7 @@ module.exports = {
     if (quiz.isCorrectAnswer(message.content)) {
       message.react('✅');
       quiz.addPoint(message.author.id);
+      await quiz.sendMessageAfterGoodAnswer(message);
       await quiz.nextQuestion(message);
     } else {
       const config = await getConfig();

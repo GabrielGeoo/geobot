@@ -82,8 +82,8 @@ export default abstract class Quiz {
     return this._currentQuestion === this._questions.length;
   }
 
-  public addQuestion(answer: string[], image: any): void {
-    this._questions.push(new QuizQuestion(answer, image));
+  public addQuestion(answer: string[], image: any, link?: string): void {
+    this._questions.push(new QuizQuestion(answer, image, link));
   }
 
   public isCorrectAnswer(answer: string): boolean {
@@ -93,10 +93,14 @@ export default abstract class Quiz {
   }
 
   public get answer(): string {
-    return this.currentQuestion.answers[0].replaceAll("_", " ");
+    return this.currentQuestion.getSendAnswer();
   }
 
   abstract getMessage(): MessageCreateOptions;
+
+  public async sendMessageAfterGoodAnswer(message: Message): Promise<void> {
+    //default do nothing
+  }
 
   public async sendCurrentQuestion(chat: ChatInputCommandInteraction | Message): Promise<void> {
     if (this._timeout) {
@@ -115,9 +119,19 @@ export default abstract class Quiz {
 class QuizQuestion {
   public answers: string[];
   public image: any;
+  public link?: string;
 
-  constructor(answers: string[], image: any) {
+  constructor(answers: string[], image: any, link?: string) {
     this.answers = answers;
     this.image = image;
+    this.link = link;
+  }
+
+  public getSendAnswer(): string {
+    if (this.link) {
+      return `[${this.answers[0].replaceAll("_", " ")}](<${this.link}>)`;
+    } else {
+      return this.answers[0].replaceAll("_", " ");
+    }
   }
 }
