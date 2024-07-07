@@ -34,27 +34,27 @@ const classement = {
     switch (args[0]) {
       case "global":
       case "g":
-        const users = await User.find({ quizTotalScore: {$ne: 0}}).sort({ quizTotalScore: -1 }).limit(10);
+        const users = await User.find({ quizTotalScore: {$gt: 0}}).sort({ quizTotalScore: -1 }).limit(10);
         const usersString = users.map((user, index) => `${index + 1}. <@${user.userId}> - ${user.quizTotalScore ?? 0} points`).join("\n");
         await interaction.reply({ content: `Classement global :\n${usersString}`, allowedMentions: { parse: [] } });
         break;
       case "daily":
       case "d":
       case "j":
-        const dailyUsers = await User.find({ "scores.daily": {$ne: 0}}).sort({ "scores.daily": -1 }).limit(10);
+        const dailyUsers = await User.find({ "scores.daily": {$gt: 0}}).sort({ "scores.daily": -1 }).limit(10);
         const dailyUsersString = dailyUsers.map((user, index) => `${index + 1}. <@${user.userId}> - ${user.scores!.daily ?? 0} points`).join("\n");
         await interaction.reply({ content: `Classement du jour :\n${dailyUsersString}`, allowedMentions: { parse: [] } });
         break;
       case "weekly":
       case "w":
       case "s":
-        const weeklyUsers = await User.find({ "scores.weekly": {$ne: 0}}).sort({ "scores.weekly": -1 }).limit(10);
+        const weeklyUsers = await User.find({ "scores.weekly": {$gt: 0}}).sort({ "scores.weekly": -1 }).limit(10);
         const weeklyUsersString = weeklyUsers.map((user, index) => `${index + 1}. <@${user.userId}> - ${user.scores!.weekly ?? 0} points`).join("\n");
-        await interaction.reply({ content: `Classement de la semaine :\n${weeklyUsersString}`, allowedMentions: { parse: [] } });
+        await interaction.reply({ content: `Classement de la semaigt :\n${weeklyUsersString}`, allowedMentions: { parse: [] } });
         break;
       case "monthly":
       case "m":
-        const monthlyUsers = await User.find({ "scores.monthly": {$ne: 0}}).sort({ "scores.monthly": -1 }).limit(10);
+        const monthlyUsers = await User.find({ "scores.monthly": {$gt: 0}}).sort({ "scores.monthly": -1 }).limit(10);
         const monthlyUsersString = monthlyUsers.map((user, index) => `${index + 1}. <@${user.userId}> - ${user.scores!.monthly ?? 0} points`).join("\n");
         await interaction.reply({ content: `Classement du mois :\n${monthlyUsersString}`, allowedMentions: { parse: [] } });
         break;
