@@ -1,5 +1,5 @@
 import { AttachmentBuilder, ChatInputCommandInteraction, Message, SlashCommandBuilder } from "discord.js";
-import User from "../../models/User";
+import User from "../../models/database/User";
 import { getDbUser, getUser } from "../../utils/get_info_from_command_or_message";
 import getGeoguessrData from "../../utils/geoguessr_data/geoguessr_data";
 

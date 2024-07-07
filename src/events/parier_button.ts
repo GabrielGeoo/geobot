@@ -1,6 +1,5 @@
 import { ActionRowBuilder, ButtonInteraction, Client, ModalActionRowComponentBuilder, ModalBuilder, TextInputBuilder, TextInputStyle } from "discord.js";
-import Pari from "../models/Pari";
-import User from "../models/User";
+import Pari from "../models/database/Pari";
 import { getDbUser } from "../utils/get_info_from_command_or_message";
 
 module.exports = {

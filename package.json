@@ -17,7 +17,6 @@
     "chart.js": "^3.9.1",
     "chartjs-adapter-moment": "^1.0.1",
     "chartjs-node-canvas": "^4.1.6",
-    "date-fns": "^3.6.0",
     "discord.js": "^14.15.2",
     "dotenv": "^16.4.5",
     "easytimer.js": "^4.6.0",

@@ -35,7 +35,7 @@ const help = {
             },
             {
               name: "Utilisation",
-              value: getUseCommand(command.data),
+              value: command.helpUtilisation ?? getUseCommand(command.data),
             }
           ]);
       }

@@ -1,5 +1,5 @@
 import { ChatInputCommandInteraction, Message, User as DiscordUser, Snowflake } from "discord.js";
-import User from "../models/User";
+import User from "../models/database/User";
 
 export function getUser(chat: ChatInputCommandInteraction | Message): DiscordUser {
   return chat instanceof Message ? chat.author : chat.user;

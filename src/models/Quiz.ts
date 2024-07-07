@@ -1,21 +1,18 @@
-import { AttachmentBuilder, ChatInputCommandInteraction, ColorResolvable, EmbedBuilder, Message, Snowflake } from "discord.js";
+import { ChatInputCommandInteraction, Message, MessageCreateOptions, Snowflake } from "discord.js";
 import normalizeString from "../utils/normalize_string";
 import QuizHandler from "../handler/quiz_handler";
 import { getDbUser } from "../utils/get_info_from_command_or_message";
 import Timer, { TimeCounter } from "easytimer.js";
 
-export default class Quiz {
-  private _questions: QuizQuestion[];
-  private _currentQuestion: number;
-  private _score: Map<Snowflake, number>;
-  private _data: QuizData;
-  private _timeout?: NodeJS.Timeout;
-  private _waitingQuestion: boolean = false;
-  private _afkQuestion: number = 0;
-  private _timer: Timer = new Timer();
+export default abstract class Quiz {
+  protected _questions: QuizQuestion[];
+  protected _currentQuestion: number;
+  protected _score: Map<Snowflake, number>;
+  protected _timeout?: NodeJS.Timeout;
+  protected _afkQuestion: number = 0;
+  protected _timer: Timer = new Timer();
 
-  constructor(name: string, question: string, color?: ColorResolvable) {
-    this._data = new QuizData(name, question, color);
+  constructor() {
     this._questions = [];
     this._currentQuestion = 0;
     this._score = new Map<Snowflake, number>();
@@ -27,10 +24,6 @@ export default class Quiz {
 
   public get score(): Map<Snowflake, number>{
     return this._score;
-  }
-
-  public get waitingQuestion(): boolean {
-    return this._waitingQuestion;
   }
 
   public get time(): TimeCounter {
@@ -49,9 +42,7 @@ export default class Quiz {
     if (this.isFinished() || this._afkQuestion > 3) {
       this.finishQuiz(interaction)
     } else {
-      this._waitingQuestion = true;
       await new Promise(resolve => setTimeout(resolve, 1000));
-      this._waitingQuestion = false;
       this.sendCurrentQuestion(interaction);
     }
   }
@@ -62,6 +53,9 @@ export default class Quiz {
     for (let [userId, score] of this.score) {
       const dbUser = await getDbUser(userId);
       dbUser.quizTotalScore += score;
+      dbUser.scores.daily += score;
+      dbUser.scores.weekly += score;
+      dbUser.scores.monthly += score;
       await dbUser.save();
     }
     let toSend = "Quiz terminé !";
@@ -91,8 +85,8 @@ export default class Quiz {
     return this._currentQuestion === this._questions.length;
   }
 
-  public addQuestion(answer: string[], image: string): void {
-    this._questions.push(new QuizQuestion(answer, image));
+  public addQuestion(answer: string[], image: any, link?: string): void {
+    this._questions.push(new QuizQuestion(answer, image, link));
   }
 
   public isCorrectAnswer(answer: string): boolean {
@@ -102,22 +96,21 @@ export default class Quiz {
   }
 
   public get answer(): string {
-    return this.currentQuestion.answers[0].replaceAll("_", " ");
+    return this.currentQuestion.getSendAnswer();
+  }
+
+  abstract getMessage(): MessageCreateOptions;
+
+  public async sendMessageAfterGoodAnswer(message: Message): Promise<void> {
+    //default do nothing
   }
 
   public async sendCurrentQuestion(chat: ChatInputCommandInteraction | Message): Promise<void> {
-    const imgName = normalizeString(this.currentQuestion.image.split(/[\/\\]/)[this.currentQuestion.image.split(/[\/\\]/).length - 1]);
-    const img = new AttachmentBuilder("assets/images/" + this._data.name + "/" + this.currentQuestion.image).setName(imgName);
-    const embed = new EmbedBuilder()
-      .setTitle(`${this._data.question} (${this._currentQuestion + 1}/${this._questions.length})`)
-      .setImage("attachment://" + normalizeString(this.currentQuestion.image.split(/[\/\\]/)[this.currentQuestion.image.split(/[\/\\]/).length - 1]))
-      .setColor(this._data.color);
-    
     if (this._timeout) {
       clearTimeout(this._timeout);
     }
 
-    const response = await chat.channel?.send({ embeds: [embed], files: [img] });
+    const response = await chat.channel?.send(this.getMessage());
     this._timer.start();
     this._timeout = setTimeout(async () => {
       chat.channel?.send(`Temps écoulé. La réponse était: ${this.answer}`);
@@ -128,22 +121,20 @@ export default class Quiz {
 
 class QuizQuestion {
   public answers: string[];
-  public image: string;
+  public image: any;
+  public link?: string;
 
-  constructor(answers: string[], image: string) {
+  constructor(answers: string[], image: any, link?: string) {
     this.answers = answers;
     this.image = image;
+    this.link = link;
   }
-}
 
-class QuizData {
-  public name: string;
-  public question: string;
-  public color: ColorResolvable;
-
-  constructor(name: string, question: string, color?: ColorResolvable) {
-    this.name = name;
-    this.question = question;
-    this.color = color ?? "#0055ff";
+  public getSendAnswer(): string {
+    if (this.link) {
+      return `[${this.answers[0].replaceAll("_", " ")}](<${this.link}>)`;
+    } else {
+      return this.answers[0].replaceAll("_", " ");
+    }
   }
 }

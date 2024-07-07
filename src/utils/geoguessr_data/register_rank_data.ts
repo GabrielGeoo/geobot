@@ -1,4 +1,4 @@
-import User from "../../models/User";
+import User from "../../models/database/User";
 import getGeoguessrData from "./geoguessr_data";
 
 export default async function registerRankData() {

@@ -4,7 +4,7 @@ import getFiles from "./get_files";
 import path from "path";
 import normalizeString from "./normalize_string";
 import getAlias from "./get_alias";
-import log from "./log";
+import BaseQuiz from "../models/BaseQuiz";
 
 export default function buildQuizCommand(data: any): any {
   const command = new SlashCommandBuilder()
@@ -45,7 +45,10 @@ export default function buildQuizCommand(data: any): any {
         await interaction.reply("Un quiz est déjà en cours dans ce channel !");
         return;
       }
-      
+
+      const all = sousQuiz.toLowerCase() === "all" && questionsNumber === 1;
+      if (all) sousQuiz = "";
+
       const files = getFiles(path.join(__dirname, "../..", "assets/images/" + data.command + (sousQuiz ? `/${normalizeString(sousQuiz)}` : "")), {recursive: false, complete: true});
       if (files.length === 0) {
         await interaction.reply("Ce quiz n'existe pas.");
@@ -68,14 +71,14 @@ export default function buildQuizCommand(data: any): any {
         };
       });
 
-
+      if (all) questionsNumber = allAnswers.length;
       if (questionsNumber > allAnswers.length) {
         await interaction.reply("Le nombre maximum de questions pour ce type de quiz est de " + allAnswers.length + " questions.");
         return;
       }
 
       //build quiz
-      QuizManager.getInstance().createQuiz(channelId, data.command, data.question, data.color);
+      QuizManager.getInstance().createQuiz(channelId, new BaseQuiz(data.command, data.question, data.color));
       for (let i = 0; i < questionsNumber; i++) {
         const random = Math.floor(Math.random() * allAnswers.length);
         const alias = await getAlias(allAnswers[random].answer);
