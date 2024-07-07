@@ -2,6 +2,8 @@ import { ChatInputCommandInteraction, Message, SlashCommandBuilder } from "disco
 import { getDbUser, getUser } from "../utils/get_info_from_command_or_message";
 import User from "../models/database/User";
 
+const helpUtilisation = "Utilisation :\n`/classement` pour voir ton classement.\n`/classement @user` pour voir le classement de quelqu'un d'autre.\n`/classement <option>` pour voir le classement global(g), journalier(d), hebdomadaire(w) ou mensuel(m).";
+
 const classementCommand = new SlashCommandBuilder()
   .setName("classement")
   .setDescription("Affiches le nombre de bonnes réponses aux quiz d'un joueur ou de soi-même.")
@@ -27,6 +29,7 @@ const classement = {
   transformOptionsToArgs(interaction: ChatInputCommandInteraction) {
     return [interaction.options.getString("option", false)]
   },
+  helpUtilisation,
   async execute(interaction: ChatInputCommandInteraction | Message, args: string[]) {
     switch (args[0]) {
       case "global":
