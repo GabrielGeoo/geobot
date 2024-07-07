@@ -53,6 +53,9 @@ export default abstract class Quiz {
     for (let [userId, score] of this.score) {
       const dbUser = await getDbUser(userId);
       dbUser.quizTotalScore += score;
+      dbUser.scores.daily += score;
+      dbUser.scores.weekly += score;
+      dbUser.scores.monthly += score;
       await dbUser.save();
     }
     let toSend = "Quiz terminé !";

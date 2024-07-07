@@ -12,6 +12,16 @@ const userSchema = new mongoose.Schema({
   coins: { type: Number, required: false, default: 0 },
   lastDaily: { type: Date, required: false, default: new Date(0) },
   quizTotalScore: { type: Number, required: false, default: 0 },
+  scores: { type: {
+    daily: { type: Number, required: false, default: 0 },
+    weekly: { type: Number, required: false, default: 0 },
+    monthly: { type: Number, required: false, default: 0 }
+  }, required: false, default: { daily: 0, weekly: 0, monthly: 0 }},
+  countryStreak: {type: {
+    current: { type: Number, required: false, default: 0 },
+    best: { type: Number, required: false, default: 0 },
+    currentCountry: { type: String, required: false, default: null }
+  }}
 });
 
 type User = InferSchemaType<typeof userSchema>;
