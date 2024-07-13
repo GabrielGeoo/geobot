@@ -1,7 +1,7 @@
 import { Chart, ChartConfiguration, Plugin } from "chart.js";
 import { ChartJSNodeCanvas } from "chartjs-node-canvas";
 import 'chartjs-adapter-moment';
-import { ChatInputCommandInteraction, Message, SlashCommandBuilder } from "discord.js";
+import { AttachmentBuilder, ChatInputCommandInteraction, Message, SlashCommandBuilder } from "discord.js";
 import * as fs from 'fs';
 import { getDbUser, getUser } from "../../utils/get_info_from_command_or_message";
 
@@ -20,12 +20,16 @@ const plugin: Plugin = {
 
 const rankgraphCommand = new SlashCommandBuilder()
   .setName("rankgraph")
-  .setDescription("Affiche le graphique de l'évolution de votre classement sur Geoguessr.");
+  .setDescription("Affiche le graphique de l'évolution de votre classement sur Geoguessr.")
+  .addUserOption(option => option
+    .setName("user")
+    .setDescription("L'utilisateur dont on veut voir le graphique.")
+    .setRequired(false)
+  );
 
 const rankgraph = {
   data: rankgraphCommand,
   async execute(interaction: ChatInputCommandInteraction | Message) {
-    console.log((interaction as Message).content);
     const user = await getDbUser(interaction);
     const rankdata = user.rankData;
     
@@ -110,7 +114,8 @@ const rankgraph = {
     const image = await chartJSNodeCanvas.renderToBuffer(configuration);
 
     fs.writeFileSync('./chart.png', image);
-    await interaction.reply({ files: ['./chart.png'] });
+    const attachment = new AttachmentBuilder('./chart.png');
+    await interaction.reply({ files: [attachment], ephemeral: true });
     fs.unlinkSync('./chart.png');
   }
 };
