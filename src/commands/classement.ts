@@ -63,7 +63,7 @@ const classement = {
         if (user.userId === getUser(interaction).id) {
           await interaction.reply(`Tu as ${user.quizTotalScore ?? 0} points.`);
         } else {
-          await interaction.reply(`<@${user.userId}> a ${user.quizTotalScore ?? 0} points.`);
+          await interaction.reply({content: `<@${user.userId}> a ${user.quizTotalScore ?? 0} points.`, allowedMentions: { parse: [] }});
         }
         break;
     }
