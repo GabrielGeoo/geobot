@@ -25,6 +25,7 @@ const rankgraphCommand = new SlashCommandBuilder()
 const rankgraph = {
   data: rankgraphCommand,
   async execute(interaction: ChatInputCommandInteraction | Message) {
+    console.log((interaction as Message).content);
     const user = await getDbUser(interaction);
     const rankdata = user.rankData;
     
@@ -46,21 +47,19 @@ const rankgraph = {
       return;
     }
 
-    const dates = Array.from({ length: 4 }, (_, i) => new Date(Date.now() - i * 24 * 60 * 60 * 1000));
-    const labels = dates.map((date) => new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate())));
-    const min = new Date(Math.min(...labels.map(date => new Date(date).getTime())));
+    const dates = rankdata.map((data: any) => data.date as Date) //Array.from({ length: 4 }, (_, i) => new Date(Date.now() - i * 24 * 60 * 60 * 1000));
+    const labels = dates.map((date: Date) => new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate())));
+    const min = new Date(Math.min(...labels.map((date: Date) => new Date(date).getTime())));
     min.setDate(min.getDate() - 1);
-    const max = new Date(Math.max(...labels.map(date => new Date(date).getTime())));
+    const max = new Date(Math.max(...labels.map((date: Date) => new Date(date).getTime())));
 
     const configuration: ChartConfiguration = {
       type: 'line',
       data: {
         labels: labels,
-        //rankdata.map((data: any) => data.date as Date),
         datasets: [{
           label: 'Score',
-          data: [1407, 1420, 1316, 1367],
-          //rankdata.map((data: any) => data.rating),
+          data: rankdata.map((data: any) => data.rating),
           borderColor: 'rgb(75, 192, 192)',
           radius: 0,
           borderWidth: 5,
