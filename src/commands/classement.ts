@@ -50,7 +50,7 @@ const classement = {
       case "s":
         const weeklyUsers = await User.find({ "scores.weekly": {$gt: 0}}).sort({ "scores.weekly": -1 }).limit(10);
         const weeklyUsersString = weeklyUsers.map((user, index) => `${index + 1}. <@${user.userId}> - ${user.scores!.weekly ?? 0} points`).join("\n");
-        await interaction.reply({ content: `Classement de la semaigt :\n${weeklyUsersString}`, allowedMentions: { parse: [] } });
+        await interaction.reply({ content: `Classement de la semaine :\n${weeklyUsersString}`, allowedMentions: { parse: [] } });
         break;
       case "monthly":
       case "m":
