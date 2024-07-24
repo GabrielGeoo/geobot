@@ -3,7 +3,7 @@ import puppeteer from 'puppeteer';
 import fs from 'fs';
 import FileHandler from "../handler/file_handler";
 import QuizHandler from "../handler/quiz_handler";
-import GeoQuiz from "../models/GeoQuiz";
+import { GeoQuiz, GeoQuizQuestion } from "../models/GeoQuiz";
 import getLocalization from "../utils/get_localization";
 require('dotenv').config();
 
@@ -84,10 +84,10 @@ const maps = {
       buffer = fs.readFileSync(fileName);
     }
 
-    QuizHandler.getInstance().createQuiz(interaction.channelId, new GeoQuiz());
+    const quiz = QuizHandler.getInstance().createQuiz(interaction.channelId, new GeoQuiz());
     const localization = await getLocalization(coord.lat, coord.lng);
-    QuizHandler.getInstance().getQuiz(interaction.channelId)?.addQuestion([localization.country], buffer, `https://www.google.com/maps/@?api=1&map_action=pano&viewpoint=${coord.lat},${coord.lng}&heading=${coord.heading}&pitch=${coord.pitch}&zoom=${coord.zoom}`);
-    await QuizHandler.getInstance().getQuiz(interaction.channelId)?.sendCurrentQuestion(interaction);
+    quiz.addQuestion(new GeoQuizQuestion([localization.country], buffer, `https://www.google.com/maps/@?api=1&map_action=pano&viewpoint=${coord.lat},${coord.lng}&heading=${coord.heading}&pitch=${coord.pitch}&zoom=${coord.zoom}`));
+    await quiz.sendCurrentQuestion(interaction);
     console.log(`Quiz created in ${(new Date().getTime() - dateDebug.getTime()) / 1000}s (total time : ${(new Date().getTime() - now.getTime()) / 1000}s)`);
     console.log(`Maps command executed with ${dbImage == null} in ${(new Date().getTime() - now.getTime()) / 1000}s`);
 

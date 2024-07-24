@@ -4,8 +4,8 @@ import QuizHandler from "../handler/quiz_handler";
 import { getDbUser } from "../utils/get_info_from_command_or_message";
 import Timer, { TimeCounter } from "easytimer.js";
 
-export default abstract class Quiz {
-  protected _questions: QuizQuestion[];
+export abstract class Quiz<T extends QuizQuestion = QuizQuestion> {
+  protected _questions: T[];
   protected _currentQuestion: number;
   protected _score: Map<Snowflake, number>;
   protected _timeout?: NodeJS.Timeout;
@@ -18,7 +18,7 @@ export default abstract class Quiz {
     this._score = new Map<Snowflake, number>();
   }
 
-  public get currentQuestion(): QuizQuestion {
+  public get currentQuestion(): T {
     return this._questions[this._currentQuestion];
   }
 
@@ -40,7 +40,7 @@ export default abstract class Quiz {
     this._currentQuestion++;
     this._afkQuestion++;
     if (this.isFinished() || this._afkQuestion > 3) {
-      this.finishQuiz(interaction)
+      this.finishQuiz(interaction);
     } else {
       await new Promise(resolve => setTimeout(resolve, 1000));
       this.sendCurrentQuestion(interaction);
@@ -85,8 +85,8 @@ export default abstract class Quiz {
     return this._currentQuestion === this._questions.length;
   }
 
-  public addQuestion(answer: string[], image: any, link?: string): void {
-    this._questions.push(new QuizQuestion(answer, image, link));
+  public addQuestion(question: T): void {
+    this._questions.push(question);
   }
 
   public isCorrectAnswer(answer: string): boolean {
@@ -119,22 +119,16 @@ export default abstract class Quiz {
   }
 }
 
-class QuizQuestion {
+export class QuizQuestion {
   public answers: string[];
   public image: any;
-  public link?: string;
 
-  constructor(answers: string[], image: any, link?: string) {
+  constructor(answers: string[], image: any) {
     this.answers = answers;
     this.image = image;
-    this.link = link;
   }
 
   public getSendAnswer(): string {
-    if (this.link) {
-      return `[${this.answers[0].replaceAll("_", " ")}](<${this.link}>)`;
-    } else {
-      return this.answers[0].replaceAll("_", " ");
-    }
+    return this.answers[0].replaceAll("_", " ");
   }
 }

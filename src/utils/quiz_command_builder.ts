@@ -5,6 +5,7 @@ import path from "path";
 import normalizeString from "./normalize_string";
 import getAlias from "./get_alias";
 import BaseQuiz from "../models/BaseQuiz";
+import { QuizQuestion } from "../models/Quiz";
 
 export default function buildQuizCommand(data: any): any {
   const command = new SlashCommandBuilder()
@@ -78,21 +79,21 @@ export default function buildQuizCommand(data: any): any {
       }
 
       //build quiz
-      QuizManager.getInstance().createQuiz(channelId, new BaseQuiz(data.command, data.question, data.color));
+      const quiz = QuizManager.getInstance().createQuiz(channelId, new BaseQuiz(data.command, data.question, data.color));
       for (let i = 0; i < questionsNumber; i++) {
         const random = Math.floor(Math.random() * allAnswers.length);
         const alias = await getAlias(allAnswers[random].answer);
         const answers = new Set<string>(alias);
         answers.delete(allAnswers[random]);
-        QuizManager.getInstance().getQuiz(channelId)?.addQuestion(
+        quiz.addQuestion(new QuizQuestion(
           [allAnswers[random].answer, ...answers],
           allAnswers[random].image
-        );
+        ));
 
         allAnswers.splice(random, 1);
       }
 
-      await QuizManager.getInstance().getQuiz(channelId)?.sendCurrentQuestion(interaction);
+      await quiz.sendCurrentQuestion(interaction);
     }
   }
 }

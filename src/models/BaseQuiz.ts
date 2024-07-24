@@ -1,8 +1,8 @@
 import { AttachmentBuilder, ColorResolvable, EmbedBuilder, MessageCreateOptions } from "discord.js";
-import Quiz from "./Quiz";
+import { Quiz, QuizQuestion } from "./Quiz";
 import normalizeString from "../utils/normalize_string";
 
-export default class BaseQuiz extends Quiz {
+export default class BaseQuiz<T extends QuizQuestion> extends Quiz<T> {
 
   private name: string;
   private question: string;

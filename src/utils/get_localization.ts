@@ -10,7 +10,7 @@ export default async function getLocalization(lat: number, lng: number): Promise
   const administrative_area_level_2 = address_components.find((component: any) => component.types.includes("administrative_area_level_2"));
   return {
     country: country.long_name,
-    administrative_area_level_1: administrative_area_level_1.long_name,
-    administrative_area_level_2: administrative_area_level_2.long_name
+    subdivision1: administrative_area_level_1.long_name,
+    subdivision2: administrative_area_level_2.long_name
   }
 }
