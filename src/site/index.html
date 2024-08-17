@@ -17,7 +17,15 @@
 </head>
 
 <body>
-    <div id="map"></div>
+    <iframe 
+        src="https://www.google.com/maps/embed/v1/streetview?key=AIzaSyBzk__fThWKnnS8Y6YaXcNNiCLr22immtI&location=43.07235204316051,2.623455288278086&heading=87.56947&pitch=0"
+        frameborder="0" style="border:0">
+    </iframe>
+    <script>
+        document.querySelector('iframe').style.height = window.innerHeight + 'px';
+        document.querySelector('iframe').style.width = window.innerWidth + 'px';
+    </script>
+    <!-- <div id="map"></div>
     <script>
         class MyURLSearchParams extends URLSearchParams {
             constructor(init) {
@@ -60,7 +68,7 @@
         const script = document.createElement('script');
         script.src = `https://maps.googleapis.com/maps/api/js?key=${key}&callback=initMap`;
         document.body.appendChild(script);
-    </script>
+    </script> -->
 </body>
 
 </html>

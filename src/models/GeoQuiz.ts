@@ -2,12 +2,12 @@ import { AttachmentBuilder, Message, MessageCreateOptions } from "discord.js";
 import { Quiz, QuizQuestion } from "./Quiz";
 
 export class GeoQuiz extends Quiz<GeoQuizQuestion> {
-  getMessage(): MessageCreateOptions {
+  override getMessage(): MessageCreateOptions {
     const attachment = new AttachmentBuilder(this.currentQuestion.image).setName("geoquiz.png");
     return { files: [attachment] };
   }
 
-  public async sendMessageAfterGoodAnswer(message: Message): Promise<void> {
+  public override async doAfterGoodAnswer(message: Message): Promise<void> {
     await message.channel?.send(`Bien joué ${message.author.displayName} ! La localisation exact est: ${this.answer}`);
   }
 }

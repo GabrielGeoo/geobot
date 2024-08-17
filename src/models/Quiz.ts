@@ -1,4 +1,4 @@
-import { ChatInputCommandInteraction, Message, MessageCreateOptions, Snowflake } from "discord.js";
+import { BaseInteraction, ChatInputCommandInteraction, Message, MessageCreateOptions, Snowflake } from "discord.js";
 import normalizeString from "../utils/normalize_string";
 import QuizHandler from "../handler/quiz_handler";
 import { getDbUser } from "../utils/get_info_from_command_or_message";
@@ -34,7 +34,7 @@ export abstract class Quiz<T extends QuizQuestion = QuizQuestion> {
     this._afkQuestion = 0;
   }
 
-  public async nextQuestion(interaction: ChatInputCommandInteraction | Message): Promise<void> {
+  public async nextQuestion(interaction: BaseInteraction | Message): Promise<void> {
     this._timer.stop();
     this._timer.reset();
     this._currentQuestion++;
@@ -47,7 +47,7 @@ export abstract class Quiz<T extends QuizQuestion = QuizQuestion> {
     }
   }
 
-  public async finishQuiz(interaction: ChatInputCommandInteraction | Message): Promise<void> {
+  public async finishQuiz(interaction: BaseInteraction | Message): Promise<void> {
     if (this._timeout) clearTimeout(this._timeout);
     this._timeout = undefined;
     for (let [userId, score] of this.score) {
@@ -101,11 +101,11 @@ export abstract class Quiz<T extends QuizQuestion = QuizQuestion> {
 
   abstract getMessage(): MessageCreateOptions;
 
-  public async sendMessageAfterGoodAnswer(message: Message): Promise<void> {
+  public async doAfterGoodAnswer(message: Message | BaseInteraction): Promise<void> {
     //default do nothing
   }
 
-  public async sendCurrentQuestion(chat: ChatInputCommandInteraction | Message): Promise<void> {
+  public async sendCurrentQuestion(chat: BaseInteraction | Message): Promise<void> {
     if (this._timeout) {
       clearTimeout(this._timeout);
     }

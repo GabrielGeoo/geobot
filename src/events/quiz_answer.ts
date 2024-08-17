@@ -1,6 +1,7 @@
 import { Client, Events, Message } from "discord.js";
 import QuizHandler from "../handler/quiz_handler";
 import getConfig from "../utils/get_config";
+import { TrainingQuiz } from "../models/TrainingQuiz";
 
 module.exports = {
   name: Events.MessageCreate,
@@ -9,12 +10,13 @@ module.exports = {
     if (message.author.bot) return;
     const quiz = QuizHandler.getInstance().getQuiz(message.channel.id);
     if (!quiz || (quiz.time.seconds == 0 && quiz.time.secondTenths == 0)) return;
+    if (quiz instanceof TrainingQuiz) return;
 
     quiz.resetAfkQuestion();
     if (quiz.isCorrectAnswer(message.content)) {
       message.react('✅');
       quiz.addPoint(message.author.id);
-      await quiz.sendMessageAfterGoodAnswer(message);
+      await quiz.doAfterGoodAnswer(message);
       await quiz.nextQuestion(message);
     } else {
       const config = await getConfig();

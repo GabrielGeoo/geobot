@@ -20,20 +20,17 @@ export default class CountryStreakHandler {
     this._timer.addEventListener('targetAchieved', () => {
       this.onTime();
     });
-    if (!this.data) {
-      console.log('No data found, creating new data');
-      this.data = (await Data.create({ cs: { lat: 0, lng: 0, heading: 0, pitch: 0, zoom: 0, streak: 0 } })).cs;
-      const embed = new EmbedBuilder()
-        .setTitle('Country Streak')
-        .setDescription('Bienvenue sur le country streak! Le but est de deviner le pays affiché sur l\'image. Pour répondre, utilisez la commande `!cs <pays>`.\nPour ajouter du temps si vous êtes plusieurs à jouer, utilisez `!time` ou `!t`')
-        .setColor(Colors.Blue);
-      const channel = this._client.channels.cache.get(process.env.COUNTRY_STREAK_CHANNEL!) as TextChannel;
-      console.log('Sending first message');
-      const message = await channel.send({ embeds: [embed] });
-      console.log('Pinning message');
-      message.pin();
-      await this.sendNextStreak();
-    }
+    // if (!this.data) {
+    //   this.data = (await Data.create({ cs: { lat: 0, lng: 0, heading: 0, pitch: 0, zoom: 0, streak: 0 } })).cs;
+    //   const embed = new EmbedBuilder()
+    //     .setTitle('Country Streak')
+    //     .setDescription('Bienvenue sur le country streak! Le but est de deviner le pays affiché sur l\'image. Pour répondre, utilisez la commande `!cs <pays>`.\nPour ajouter du temps si vous êtes plusieurs à jouer, utilisez `!time` ou `!t`')
+    //     .setColor(Colors.Blue);
+    //   const channel = this._client.channels.cache.get(process.env.COUNTRY_STREAK_CHANNEL!) as TextChannel;
+    //   const message = await channel.send({ embeds: [embed] });
+    //   message.pin();
+    //   await this.sendNextStreak();
+    // }
   }
 
   public static guess(user: Snowflake, answer: string): boolean {
