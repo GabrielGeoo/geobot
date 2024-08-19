@@ -12,14 +12,14 @@ const trainingCommand = new SlashCommandBuilder()
   .addStringOption(option =>
     option.setName("quiz").setDescription("Quiz d'entrainement").setRequired(true))
   .addNumberOption(option =>
-    option.setMinValue(2).setMaxValue(4).setName("nb_answers").setDescription("Nombre de réponses proposés"))
-  .addNumberOption(option =>
     option.setMinValue(1).setName("nb_questions").setDescription("Nombre de questions"))
+  .addNumberOption(option =>
+    option.setMinValue(2).setMaxValue(4).setName("nb_reponses_possibles").setDescription("Nombre de réponses proposés"));
 
 const training = {
   data: trainingCommand,
   transformOptionsToArgs(interaction: ChatInputCommandInteraction) {
-    return [interaction.options.getString("quiz"), interaction.options.getNumber("nb_answers") ?? 4, interaction.options.getNumber("nb_questions") ?? 1];
+    return [interaction.options.getString("quiz"), interaction.options.getNumber("nb_questions") ?? 1, interaction.options.getNumber("nb_reponses_possibles") ?? 4];
   },
   async execute(interaction: ChatInputCommandInteraction | Message, args: string[]) {
     let quizName = args[0];
@@ -41,7 +41,7 @@ const training = {
       return;
     }
 
-    const files = getFiles(path.join(__dirname, "../..", "assets/images/" + quizName), {recursive: false, complete: true});
+    const files = getFiles(path.join(__dirname, "../..", "assets/images/" + quizName), { recursive: false, complete: true });
     if (files.length === 0) {
       await interaction.reply("Ce quiz n'existe pas.");
       return;
