@@ -49,7 +49,7 @@ async function main() {
     await registerCommands(client);
     await client.login(process.env.BOT_TOKEN);
     console.log('Bot started');
-    await CountryStreakHandler.init(client);
+    //await CountryStreakHandler.init(client);
   } catch (error) {
     console.log('Error when running the bot:');
     console.error(error);
