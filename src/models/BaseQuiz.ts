@@ -1,8 +1,8 @@
 import { AttachmentBuilder, ColorResolvable, EmbedBuilder, MessageCreateOptions } from "discord.js";
-import Quiz from "./Quiz";
+import { Quiz, QuizQuestion } from "./Quiz";
 import normalizeString from "../utils/normalize_string";
 
-export default class BaseQuiz extends Quiz {
+export default class BaseQuiz<T extends QuizQuestion> extends Quiz<T> {
 
   private name: string;
   private question: string;
@@ -15,7 +15,7 @@ export default class BaseQuiz extends Quiz {
     this.color = color || "#0099ff";
   }
 
-  getMessage(): MessageCreateOptions {
+  override getMessage(): MessageCreateOptions {
     const imgName = normalizeString(this.currentQuestion.image.split(/[\/\\]/)[this.currentQuestion.image.split(/[\/\\]/).length - 1]);
     const img = new AttachmentBuilder("assets/images/" + this.name + "/" + this.currentQuestion.image).setName(imgName);
     const embed = new EmbedBuilder()

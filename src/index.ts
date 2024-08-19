@@ -6,6 +6,8 @@ import mongoose from "mongoose";
 import log from "./utils/log";
 import { GridFSBucket } from 'mongodb';
 import FileHandler from "./handler/file_handler";
+import CountryStreakHandler from "./handler/country_streak_handler";
+import Data from "./models/database/Data";
 
 require('dotenv').config();
 
@@ -38,12 +40,16 @@ async function main() {
     console.log('Starting bot...');
     await mongoose.connect(process.env.MONGODB_URI!, {dbName: "GeoBot"});
     console.log('Connected to MongoDB');
+    if (process.env.DEV) {
+      await (await Data.findOne())?.deleteOne();
+    }
     gfs = new GridFSBucket(mongoose.connection.db, { bucketName: 'images' });
     FileHandler.init(gfs);
     await registerEvents(client);
     await registerCommands(client);
-    client.login(process.env.BOT_TOKEN);
+    await client.login(process.env.BOT_TOKEN);
     console.log('Bot started');
+    //await CountryStreakHandler.init(client);
   } catch (error) {
     console.log('Error when running the bot:');
     console.error(error);
