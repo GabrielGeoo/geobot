@@ -14,10 +14,10 @@ module.exports = {
         return;
       }
       
-      const answer = interaction.customId.split("-")[1];
+      const answer = interaction.customId.split("-").slice(1).join("-");
+      quiz.resetAfkQuestion();
       quiz.updateComponents(interaction, answer);
       if (quiz.isCorrectAnswer(answer)) {
-        interaction.channel?.send("Bonne réponse !");
         quiz.addPoint(interaction.user.id);
         quiz.doAfterGoodAnswer(interaction);
         await quiz.nextQuestion(interaction);

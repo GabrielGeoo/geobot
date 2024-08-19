@@ -29,6 +29,10 @@ const training = {
     }
     let questionsNumber = args[1] ? parseInt(args[1]) : 1;
     let nbAnswers = args[2] ? parseInt(args[2]) : 4;
+    if (nbAnswers > 5) {
+      await interaction.reply("Le nombre maximum de réponses est de 5.");
+      return;
+    }
 
     const channelId = interaction.channelId;
     const quizAnswer = QuizManager.getInstance().getQuiz(channelId);
@@ -68,11 +72,8 @@ const training = {
     for (let i = 0; i < questionsNumber; i++) {
       const random = Math.floor(Math.random() * allAnswers.length);
       let badAnswers: string[] = [];
-      let allAnswersRemaining = [...allAnswers];
+      let allAnswersRemaining = [...allAnswersCopy].filter(answer => answer.answer !== allAnswers[random].answer);
       for (let i = 0; i < nbAnswers - 1; i++) {
-        if (allAnswersRemaining.length === 0) {
-          allAnswersRemaining = [...allAnswersCopy].filter(answer => !badAnswers.includes(answer.answer));
-        }
         const random = Math.floor(Math.random() * allAnswersRemaining.length);
         badAnswers.push(allAnswersRemaining[random].answer);
         allAnswersRemaining.splice(random, 1);

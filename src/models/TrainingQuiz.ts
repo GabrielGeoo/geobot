@@ -6,6 +6,8 @@ import { ActionRowBuilder } from "@discordjs/builders";
 export class TrainingQuiz extends BaseQuiz<TrainingQuizQuestion> {
 
   private currentButtons: ButtonBuilder[] = [];
+  private badAnswersCounter: number = 0;
+  private firstGoodAnswerCounter: number = 0;
 
   override getMessage(): MessageCreateOptions {
     const message = super.getMessage();
@@ -14,6 +16,9 @@ export class TrainingQuiz extends BaseQuiz<TrainingQuizQuestion> {
   }
 
   override async doAfterGoodAnswer(interaction: ButtonInteraction): Promise<void> {
+    const badAnswers = this.currentButtons.filter((button) => button.toJSON().style == ButtonStyle.Danger).length;
+    this.badAnswersCounter += badAnswers;
+    if (badAnswers === 0) this.firstGoodAnswerCounter++;
     this.currentButtons = [];
   }
 
@@ -28,6 +33,18 @@ export class TrainingQuiz extends BaseQuiz<TrainingQuizQuestion> {
       content: this.getMessage().content,
       components: [this.getComponents()],
     });
+  }
+
+  protected override getResultMessage(): string {
+    let message = "Quiz terminé !\n";
+    if (this.score.size === 0) {
+      message += "\nAucun point marqué.";
+    } else {
+      message += "Résultats :\n";
+      message += `\u2003\u2003- ${this.firstGoodAnswerCounter} bonnes réponses au premier essai (${Math.round((this.firstGoodAnswerCounter/this._currentQuestion)*100)}%)\n`;
+      message += `\u2003\u2003- ${this.badAnswersCounter} mauvaises réponses`;
+    }
+    return message
   }
 
   private getComponents(): ActionRowBuilder<ButtonBuilder> {
@@ -48,7 +65,6 @@ export class TrainingQuiz extends BaseQuiz<TrainingQuizQuestion> {
 
       this.currentButtons.sort(() => Math.random() - 0.5);
     }
-    console.log(this.currentButtons);
     const row = new ActionRowBuilder<ButtonBuilder>();
     row.addComponents(this.currentButtons);
     return row;

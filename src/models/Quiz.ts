@@ -58,19 +58,24 @@ export abstract class Quiz<T extends QuizQuestion = QuizQuestion> {
       dbUser.scores.monthly += score;
       await dbUser.save();
     }
-    let toSend = "Quiz terminé !";
+    
+    const message = this.getResultMessage();
+    await interaction.channel?.send({ content: message, allowedMentions: { parse: [] }});
+    QuizHandler.getInstance().removeQuiz(interaction.channel!.id);
+  }
+
+  protected getResultMessage(): string {
+    let message = "Quiz terminé !";
     if (this.score.size == 0) {
-      toSend += "\nAucun joueur n'a marqué de point."
-      await interaction.channel?.send(toSend);
+      message += "\nAucun joueur n'a marqué de point."
     } else {
       const scoreSorted = new Map([...this.score.entries()].sort((a, b) => b[1] - a[1]));
-      toSend += " Voici les scores :\n";
+      message += " Voici les scores :\n";
       scoreSorted.forEach((value, key) => {
-        toSend += `<@${key}> : ${value} points\n`;
+        message += `<@${key}> : ${value} points\n`;
       });
-      await interaction.channel?.send({ content: toSend, allowedMentions: { parse: [] }});
     }
-    QuizHandler.getInstance().removeQuiz(interaction.channel!.id);
+    return message;
   }
 
   public get length(): number {
@@ -110,7 +115,14 @@ export abstract class Quiz<T extends QuizQuestion = QuizQuestion> {
       clearTimeout(this._timeout);
     }
 
-    const response = await chat.channel?.send(this.getMessage());
+    let response;
+    try {
+      response = await chat.channel?.send(this.getMessage());
+    } catch (e) {
+      console.error(e);
+      console.log(this.getMessage());
+      throw e;
+    }
     this._timer.start();
     this._timeout = setTimeout(async () => {
       chat.channel?.send(`Temps écoulé. La réponse était: ${this.answer}`);
