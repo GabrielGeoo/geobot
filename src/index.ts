@@ -43,8 +43,12 @@ async function main() {
     if (process.env.DEV) {
       await (await Data.findOne())?.deleteOne();
     }
-    gfs = new GridFSBucket(mongoose.connection.db, { bucketName: 'images' });
-    FileHandler.init(gfs);
+    const db = mongoose.connection.db;
+    if (!db) {
+      throw new Error("Failed to connect to database, db is undefined.");
+    }
+
+    gfs = new GridFSBucket(db, { bucketName: 'images' });    FileHandler.init(gfs);
     await registerEvents(client);
     await registerCommands(client);
     await client.login(process.env.BOT_TOKEN);
