@@ -12,7 +12,7 @@ export default function startBackgroundWorker() {
         break;
       case '/map':
         const file = createReadStream('src/site/index.html');
-        file.pipe(res);
+        file.pipe(res as unknown as NodeJS.WritableStream);
         file.on('end', () => {
           res.end();
         });
