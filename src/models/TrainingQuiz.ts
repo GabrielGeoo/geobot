@@ -1,4 +1,4 @@
-import { ButtonBuilder, ButtonInteraction, ButtonStyle, MessageComponentInteraction, MessageCreateOptions } from "discord.js";
+import { APIButtonComponentWithCustomId, ButtonBuilder, ButtonInteraction, ButtonStyle, MessageComponentInteraction, MessageCreateOptions } from "discord.js";
 import BaseQuiz from "./BaseQuiz";
 import { QuizQuestion } from "./Quiz";
 import { ActionRowBuilder } from "@discordjs/builders";
@@ -16,7 +16,7 @@ export class TrainingQuiz extends BaseQuiz<TrainingQuizQuestion> {
   }
 
   override async doAfterGoodAnswer(interaction: ButtonInteraction): Promise<void> {
-    const badAnswers = this.currentButtons.filter((button) => button.toJSON().style == ButtonStyle.Danger).length;
+    const badAnswers = this.currentButtons.filter((button) => (button.toJSON() as APIButtonComponentWithCustomId).style == ButtonStyle.Danger).length;
     this.badAnswersCounter += badAnswers;
     if (badAnswers === 0) this.firstGoodAnswerCounter++;
     this.currentButtons = [];
@@ -24,10 +24,10 @@ export class TrainingQuiz extends BaseQuiz<TrainingQuizQuestion> {
 
   public updateComponents(interaction: MessageComponentInteraction, answer: string): void {
     if (this.isCorrectAnswer(answer)) {
-      this.currentButtons.find((button) => button.toJSON().label === this.normalizeStringForUser(answer))?.setStyle(ButtonStyle.Success);
-      this.currentButtons.forEach((button) => button.setCustomId("DISABLED-" + button.toJSON().label));
+      this.currentButtons.find((button) => (button.toJSON() as APIButtonComponentWithCustomId).label === this.normalizeStringForUser(answer))?.setStyle(ButtonStyle.Success);
+      this.currentButtons.forEach((button) => button.setCustomId("DISABLED-" + (button.toJSON() as APIButtonComponentWithCustomId).label));
     } else {
-      this.currentButtons.find((button) => button.toJSON().label === this.normalizeStringForUser(answer))?.setStyle(ButtonStyle.Danger);
+      this.currentButtons.find((button) => (button.toJSON() as APIButtonComponentWithCustomId).label === this.normalizeStringForUser(answer))?.setStyle(ButtonStyle.Danger);
     }
     interaction.update({
       content: this.getMessage().content,

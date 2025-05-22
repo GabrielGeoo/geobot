@@ -1,4 +1,4 @@
-import { BaseInteraction, ChatInputCommandInteraction, Message, MessageCreateOptions, Snowflake } from "discord.js";
+import { BaseInteraction, ChatInputCommandInteraction, Message, MessageCreateOptions, Snowflake, TextChannel } from "discord.js";
 import normalizeString from "../utils/normalize_string";
 import QuizHandler from "../handler/quiz_handler";
 import { getDbUser } from "../utils/get_info_from_command_or_message";
@@ -60,7 +60,7 @@ export abstract class Quiz<T extends QuizQuestion = QuizQuestion> {
     }
     
     const message = this.getResultMessage();
-    await interaction.channel?.send({ content: message, allowedMentions: { parse: [] }});
+    await (interaction.channel as TextChannel)?.send({ content: message, allowedMentions: { parse: [] }});
     QuizHandler.getInstance().removeQuiz(interaction.channel!.id);
   }
 
@@ -117,7 +117,7 @@ export abstract class Quiz<T extends QuizQuestion = QuizQuestion> {
 
     let response;
     try {
-      response = await chat.channel?.send(this.getMessage());
+      response = await (chat.channel as TextChannel)?.send(this.getMessage());
     } catch (e) {
       console.error(e);
       console.log(this.getMessage());
@@ -125,7 +125,7 @@ export abstract class Quiz<T extends QuizQuestion = QuizQuestion> {
     }
     this._timer.start();
     this._timeout = setTimeout(async () => {
-      chat.channel?.send(`Temps écoulé. La réponse était: ${this.answer}`);
+      (chat.channel as TextChannel)?.send(`Temps écoulé. La réponse était: ${this.answer}`);
       await this.nextQuestion(response as Message);
     }, 30000);
   }

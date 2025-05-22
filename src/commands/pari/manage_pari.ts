@@ -1,4 +1,4 @@
-import { ChatInputCommandInteraction, Message, SlashCommandBuilder, PermissionFlagsBits, EmbedBuilder, ButtonBuilder, ButtonStyle, ActionRowBuilder } from "discord.js";
+import { ChatInputCommandInteraction, Message, SlashCommandBuilder, PermissionFlagsBits, EmbedBuilder, ButtonBuilder, ButtonStyle, ActionRowBuilder, TextChannel } from "discord.js";
 import Pari from "../../models/database/Pari";
 
 const setPariCommand = new SlashCommandBuilder()
@@ -88,9 +88,9 @@ const setPari = {
         
         if (interaction instanceof Message && interaction.attachments.size > 0) {
           embed.setImage(interaction.attachments.first()!.url);
-          await interaction.channel?.send({ embeds: [embed], components: [row], files: [interaction.attachments.first()!] });
+          await (interaction.channel as TextChannel)?.send({ embeds: [embed], components: [row], files: [interaction.attachments.first()!] });
         } else {
-          await interaction.channel?.send({ embeds: [embed], components: [row]});
+          await (interaction.channel as TextChannel)?.send({ embeds: [embed], components: [row]});
         }
 
         if (interaction instanceof ChatInputCommandInteraction) {

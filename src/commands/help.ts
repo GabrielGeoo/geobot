@@ -40,17 +40,24 @@ const help = {
           ]);
       }
     } else {
+      const commandsString = commands.get().filter(c => !c.quizCommand).map((command) => getStringCommand(command.data)).join("\n");
+      const lengthSeparated = Math.ceil(commandsString.length / 1024);
+      const quizString = commands.get().filter(c => c.quizCommand).map((command) => getStringCommand(command.data)).join("\n");
+      const lengthSeparatedQuiz = Math.ceil(quizString.length / 1024);
+
       embed = new EmbedBuilder()
-        .addFields([
-          {
-            name: "Liste des commandes",
-            value: commands.get().filter(c => !c.quizCommand).map((command) => getStringCommand(command.data)).join("\n"),
-          },
-          {
-            name: "Liste des quiz",
-            value: commands.get().filter(c => c.quizCommand).map((command) => getStringCommand(command.data)).join("\n"),
+        .addFields(splitArray(commands.get().filter(c => !c.quizCommand), lengthSeparated).map((commands, index) => {
+          return {
+            name: index == 0 ? `Liste des commandes` : "\u200b",
+            value: commands.map((command) => getStringCommand(command.data)).join("\n"),
           }
-        ]);
+        }))
+        .addFields(splitArray(commands.get().filter(c => c.quizCommand), lengthSeparatedQuiz).map((commands, index) => {
+          return {
+            name: index == 0 ? `Liste des quiz` : "\u200b",
+            value: commands.map((command) => getStringCommand(command.data)).join("\n"),
+          }
+        }))
     }
     embed.setColor("#FF0000");
     interaction.reply({ embeds: [embed] });
@@ -86,4 +93,19 @@ function getUseCommand(command: SlashCommandBuilder) {
     }
     return result;
   }
+}
+
+function splitArray<T>(array: T[], n: number): T[][] {
+  const result: T[][] = [];
+  const minSize = Math.floor(array.length / n);
+  const extra = array.length % n; // le nombre de tableaux qui auront un élément en plus
+
+  let start = 0;
+  for (let i = 0; i < n; i++) {
+    const size = i < extra ? minSize + 1 : minSize;
+    result.push(array.slice(start, start + size));
+    start += size;
+  }
+
+  return result;
 }

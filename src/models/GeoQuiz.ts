@@ -1,4 +1,4 @@
-import { AttachmentBuilder, Message, MessageCreateOptions } from "discord.js";
+import { AttachmentBuilder, Message, MessageCreateOptions, TextChannel } from "discord.js";
 import { Quiz, QuizQuestion } from "./Quiz";
 
 export class GeoQuiz extends Quiz<GeoQuizQuestion> {
@@ -8,7 +8,7 @@ export class GeoQuiz extends Quiz<GeoQuizQuestion> {
   }
 
   public override async doAfterGoodAnswer(message: Message): Promise<void> {
-    await message.channel?.send(`Bien joué ${message.author.displayName} ! La localisation exact est: ${this.answer}`);
+    await (message.channel as TextChannel)?.send(`Bien joué ${message.author.displayName} ! La localisation exact est: ${this.answer}`);
   }
 }
 

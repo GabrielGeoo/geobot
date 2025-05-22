@@ -1,4 +1,4 @@
-import { ChatInputCommandInteraction, Message, SlashCommandBuilder } from "discord.js";
+import { ChatInputCommandInteraction, Message, SlashCommandBuilder, TextChannel } from "discord.js";
 import QuizManager from "../handler/quiz_handler";
 
 const stopCommand = new SlashCommandBuilder()
@@ -10,7 +10,7 @@ const stop = {
   async execute(interaction: ChatInputCommandInteraction | Message) {
     const quiz = QuizManager.getInstance().getQuiz(interaction.channelId);
     if (quiz) {
-      interaction.channel?.send(`Quiz arrêté ! La réponse était: ${quiz.answer}`);
+      (interaction.channel as TextChannel)?.send(`Quiz arrêté ! La réponse était: ${quiz.answer}`);
       quiz.finishQuiz(interaction);
     } else {
       await interaction.reply({ content: "Aucun quiz en cours dans ce channel", ephemeral: true });
