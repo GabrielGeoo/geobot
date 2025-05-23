@@ -15,7 +15,7 @@ export default async function getRankDataString(data: any, user: any, client: Cl
   const progressData = await fetch(`https://www.geoguessr.com/api/v4/ranked-system/progress/${user.geoguessrId}`);
   let progressDivision;
   let divisionPosition = "";
-  if (progressData.ok) {
+  if (progressData.status === 200) {
     const progressDataJson = await progressData.json();
     progressDivision = new Division(progressDataJson.divisionNumber);
   } else {
